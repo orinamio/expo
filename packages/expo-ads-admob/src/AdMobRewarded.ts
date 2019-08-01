@@ -13,6 +13,7 @@ const eventNames = [
   'rewardedVideoDidStart',
   'rewardedVideoDidClose',
   'rewardedVideoWillLeaveApplication',
+  'rewardedVideoDidComplete',
 ];
 
 type EventNameType =
@@ -22,7 +23,8 @@ type EventNameType =
   | 'rewardedVideoDidOpen'
   | 'rewardedVideoDidStart'
   | 'rewardedVideoDidClose'
-  | 'rewardedVideoWillLeaveApplication';
+  | 'rewardedVideoWillLeaveApplication'
+  | 'rewardedVideoDidComplete';
 
 const eventEmitter = new EventEmitter(AdMobNativeModule);
 

@@ -10,6 +10,7 @@ const eventNames = [
     'rewardedVideoDidStart',
     'rewardedVideoDidClose',
     'rewardedVideoWillLeaveApplication',
+    'rewardedVideoDidComplete',
 ];
 const eventEmitter = new EventEmitter(AdMobNativeModule);
 const eventHandlers = {};
