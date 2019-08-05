@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.postoffice.pendingdeliveries;
+package expo.modules.notifications.postoffice.pendingdeliveries;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;

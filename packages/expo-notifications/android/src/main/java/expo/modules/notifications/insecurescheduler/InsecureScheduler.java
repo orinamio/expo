@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.insecurecheduler;
+package expo.modules.notifications.insecurescheduler;
 
 import android.content.Context;
 import android.os.Bundle;

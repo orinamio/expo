@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters;
+package expo.modules.notifications.presenters;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -8,21 +8,20 @@ import android.support.v4.app.NotificationManagerCompat;
 import java.util.ArrayList;
 import java.util.List;
 
-import host.exp.exponent.notifications.presenters.modifiers.StickyModifier;
-import host.exp.exponent.notifications.presenters.modifiers.BodyModifier;
-import host.exp.exponent.notifications.presenters.modifiers.CategoryModifier;
-import host.exp.exponent.notifications.presenters.modifiers.ChannelModifier;
-import host.exp.exponent.notifications.presenters.modifiers.ColorModifier;
-import host.exp.exponent.notifications.presenters.modifiers.ExperienceIdModifier;
-import host.exp.exponent.notifications.presenters.modifiers.IconModifier;
-import host.exp.exponent.notifications.presenters.modifiers.ImportanceModifier;
-import host.exp.exponent.notifications.presenters.modifiers.IntentModifier;
-import host.exp.exponent.notifications.presenters.modifiers.LinkModifier;
-import host.exp.exponent.notifications.presenters.modifiers.NotificationModifier;
-import host.exp.exponent.notifications.presenters.modifiers.SoundModifer;
-import host.exp.exponent.notifications.presenters.modifiers.TitleModifier;
-import host.exp.exponent.notifications.presenters.modifiers.VibrateModifier;
-import io.fabric.sdk.android.services.concurrency.AsyncTask;
+import expo.modules.notifications.presenters.modifiers.StickyModifier;
+import expo.modules.notifications.presenters.modifiers.BodyModifier;
+import expo.modules.notifications.presenters.modifiers.CategoryModifier;
+import expo.modules.notifications.presenters.modifiers.ChannelModifier;
+import expo.modules.notifications.presenters.modifiers.ColorModifier;
+import expo.modules.notifications.presenters.modifiers.ExperienceIdModifier;
+import expo.modules.notifications.presenters.modifiers.IconModifier;
+import expo.modules.notifications.presenters.modifiers.ImportanceModifier;
+import expo.modules.notifications.presenters.modifiers.IntentModifier;
+import expo.modules.notifications.presenters.modifiers.LinkModifier;
+import expo.modules.notifications.presenters.modifiers.NotificationModifier;
+import expo.modules.notifications.presenters.modifiers.SoundModifer;
+import expo.modules.notifications.presenters.modifiers.TitleModifier;
+import expo.modules.notifications.presenters.modifiers.VibrateModifier;
 
 public class NotificationPresenterImpl implements NotificationPresenter {
 
@@ -31,7 +30,7 @@ public class NotificationPresenterImpl implements NotificationPresenter {
   @Override
   public void presentNotification(Context context, String experienceId, Bundle notification, final int notificationId) {
 
-    AsyncTask.execute(() -> {
+    new Thread(() -> {
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
 
       notification.putInt("notificationIntId", notificationId);
@@ -42,7 +41,8 @@ public class NotificationPresenterImpl implements NotificationPresenter {
 
       NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
       notificationManagerCompat.notify(experienceId, notificationId, builder.build());
-    });
+
+    }).start(); // this may result in leak (anonymous class is a inner class so it has ref to outer class)
 
   }
 

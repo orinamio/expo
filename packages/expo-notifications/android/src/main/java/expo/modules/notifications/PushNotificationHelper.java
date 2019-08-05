@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import android.app.Notification;
 import android.app.PendingIntent;

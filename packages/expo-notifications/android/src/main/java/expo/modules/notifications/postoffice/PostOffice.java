@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.postoffice;
+package expo.modules.notifications.postoffice;
 
 import android.os.Bundle;
 
@@ -9,11 +9,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import host.exp.exponent.notifications.helpers.Utils;
-import host.exp.exponent.notifications.postoffice.pendingdeliveries.PendingForegroundNotification;
-import host.exp.exponent.notifications.postoffice.pendingdeliveries.PendingForegroundNotification$Table;
-import host.exp.exponent.notifications.postoffice.pendingdeliveries.PendingUserInteraction;
-import host.exp.exponent.notifications.postoffice.pendingdeliveries.PendingUserInteraction$Table;
+import expo.modules.notifications.helpers.Utils;
+import expo.modules.notifications.postoffice.pendingdeliveries.PendingForegroundNotification;
+import expo.modules.notifications.postoffice.pendingdeliveries.PendingForegroundNotification$Table;
+import expo.modules.notifications.postoffice.pendingdeliveries.PendingUserInteraction;
+import expo.modules.notifications.postoffice.pendingdeliveries.PendingUserInteraction$Table;
 
 class PostOffice implements ExpoPostOffice {
 

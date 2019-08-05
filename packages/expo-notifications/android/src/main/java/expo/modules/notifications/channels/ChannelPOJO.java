@@ -1,17 +1,17 @@
-package host.exp.exponent.notifications.channels;
+package expo.modules.notifications.channels;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_BADGE;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_DESCRIPTION;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_GROUP_ID;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_NAME;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_PRIORITY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_SOUND;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_VIBRATE;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_BADGE;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_DESCRIPTION;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_GROUP_ID;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_NAME;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_PRIORITY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_SOUND;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_VIBRATE;
 
 public class ChannelPOJO implements Serializable {
 

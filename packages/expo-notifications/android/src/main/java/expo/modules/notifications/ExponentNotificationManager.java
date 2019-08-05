@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import android.app.AlarmManager;
 import android.app.Notification;
@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import javax.inject.Inject;
 
-import host.exp.exponent.notifications.insecurecheduler.ScheduledNotificationReceiver;
+import expo.modules.notifications.insecurescheduler.ScheduledNotificationReceiver;
 import host.exp.exponent.storage.ExponentSharedPreferences;
 import host.exp.expoview.R;
 

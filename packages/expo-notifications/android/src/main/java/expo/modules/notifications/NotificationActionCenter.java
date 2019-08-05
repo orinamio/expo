@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -15,9 +15,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import host.exp.exponent.kernel.KernelConstants;
-
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ACTION_TYPE_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
 
 public class NotificationActionCenter {
   public static final String KEY_TEXT_REPLY = "notification_remote_input";
@@ -62,7 +61,7 @@ public class NotificationActionCenter {
 
     String actionId = actionObject.getActionId();
 
-    intent.putExtra(KernelConstants.NOTIFICATION_ACTION_TYPE_KEY, actionId);
+    intent.putExtra(NOTIFICATION_ACTION_TYPE_KEY, actionId);
     PendingIntent pendingIntent = PendingIntent.getActivity(context, UUID.randomUUID().hashCode(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
     NotificationCompat.Action.Builder actionBuilder = new NotificationCompat.Action.Builder(0,

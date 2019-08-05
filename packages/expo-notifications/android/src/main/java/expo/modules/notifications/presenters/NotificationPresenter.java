@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters;
+package expo.modules.notifications.presenters;
 
 import android.content.Context;
 import android.os.Bundle;

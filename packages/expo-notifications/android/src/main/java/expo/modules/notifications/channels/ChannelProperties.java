@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.channels;
+package expo.modules.notifications.channels;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;

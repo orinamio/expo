@@ -6,18 +6,18 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import host.exp.exponent.Constants;
-import host.exp.exponent.notifications.presenters.NotificationPresenterProvider;
+import expo.modules.notifications.presenters.NotificationPresenterProvider;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_BODY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_COLOR;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_DATA;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_ICON;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_REMOTE;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_SOUND;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_TITLE;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_BODY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_COLOR;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DATA;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ICON;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_REMOTE;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_SOUND;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_TITLE;
 
 public class ExpoFcmMessagingService extends FirebaseMessagingService {
 

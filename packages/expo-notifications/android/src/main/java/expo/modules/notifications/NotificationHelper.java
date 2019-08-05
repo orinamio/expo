@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;

@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import com.raizlabs.android.dbflow.annotation.Column;
 import com.raizlabs.android.dbflow.annotation.PrimaryKey;
@@ -7,14 +7,14 @@ import com.raizlabs.android.dbflow.structure.BaseModel;
 
 import java.util.Map;
 
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_BUTTON_TITLE;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_ID;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_IS_AUTHENTICATION_REQUIRED;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_IS_DESTRUCTIVE;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_PLACEHOLDER;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_SUBMIT_BUTTON_TITLE;
-import static host.exp.exponent.notifications.NotificationConstants.ACTION_TEXT_INPUT;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
+import static expo.modules.notifications.NotificationConstants.ACTION_BUTTON_TITLE;
+import static expo.modules.notifications.NotificationConstants.ACTION_ID;
+import static expo.modules.notifications.NotificationConstants.ACTION_IS_AUTHENTICATION_REQUIRED;
+import static expo.modules.notifications.NotificationConstants.ACTION_IS_DESTRUCTIVE;
+import static expo.modules.notifications.NotificationConstants.ACTION_PLACEHOLDER;
+import static expo.modules.notifications.NotificationConstants.ACTION_SUBMIT_BUTTON_TITLE;
+import static expo.modules.notifications.NotificationConstants.ACTION_TEXT_INPUT;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
 
 @Table(databaseName = ActionDatabase.NAME)
 public class ActionObject extends BaseModel {

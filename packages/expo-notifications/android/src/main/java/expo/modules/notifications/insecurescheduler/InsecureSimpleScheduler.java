@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.insecurecheduler;
+package expo.modules.notifications.insecurescheduler;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
@@ -9,12 +9,12 @@ import android.os.Build;
 import java.util.HashMap;
 import java.util.List;
 
-import host.exp.exponent.notifications.insecurecheduler.repository.ScheduledNotification;
-import host.exp.exponent.notifications.insecurecheduler.repository.ScheduledNotificationRepository;
+import expo.modules.notifications.insecurescheduler.repository.ScheduledNotification;
+import expo.modules.notifications.insecurescheduler.repository.ScheduledNotificationRepository;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_EXACT_TIME;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXACT_TIME;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
 
 public class InsecureSimpleScheduler implements InsecureScheduler {
 

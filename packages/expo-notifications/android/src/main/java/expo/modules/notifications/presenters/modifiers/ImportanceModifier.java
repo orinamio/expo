@@ -1,12 +1,12 @@
-package host.exp.exponent.notifications.presenters.modifiers;
+package expo.modules.notifications.presenters.modifiers;
 
 import android.content.Context;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
-import host.exp.exponent.notifications.helpers.Utils;
+import expo.modules.notifications.helpers.Utils;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_PRIORITY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_PRIORITY;
 
 public class ImportanceModifier implements NotificationModifier {
   @Override

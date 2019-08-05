@@ -11,7 +11,7 @@ import com.google.firebase.iid.InstanceIdResult;
 
 import java.io.IOException;
 
-import host.exp.exponent.notifications.ExponentNotificationIntentService;
+import expo.modules.notifications.ExponentNotificationIntentService;
 import host.exp.exponent.storage.ExponentSharedPreferences;
 
 public class FcmRegistrationIntentService extends ExponentNotificationIntentService {

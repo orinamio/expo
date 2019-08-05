@@ -1,8 +1,8 @@
-package host.exp.exponent.notifications.managers;
+package expo.modules.notifications.managers;
 
 import org.unimodules.core.interfaces.Function;
 
-import host.exp.exponent.notifications.schedulers.Scheduler;
+import expo.modules.notifications.schedulers.Scheduler;
 
 public interface SchedulersManager {
 

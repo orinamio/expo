@@ -1,10 +1,10 @@
-package host.exp.exponent.notifications.presenters;
+package expo.modules.notifications.presenters;
 
 import android.app.ActivityManager;
 import android.content.Context;
 import android.os.Bundle;
 
-import host.exp.exponent.notifications.postoffice.PostOfficeProxy;
+import expo.modules.notifications.postoffice.PostOfficeProxy;
 
 import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_FOREGROUND;
 import static android.app.ActivityManager.RunningAppProcessInfo.IMPORTANCE_VISIBLE;

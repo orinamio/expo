@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters.modifiers;
+package expo.modules.notifications.presenters.modifiers;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.util.UUID;
 
-import host.exp.exponent.kernel.KernelConstants;
+import expo.modules.notifications.kernel.KernelConstants;
 
 public class IntentModifier implements NotificationModifier {
   @Override

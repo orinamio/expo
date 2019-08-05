@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.insecurecheduler.repository;
+package expo.modules.notifications.insecurescheduler.repository;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

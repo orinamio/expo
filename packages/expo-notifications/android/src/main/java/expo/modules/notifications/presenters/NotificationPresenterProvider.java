@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters;
+package expo.modules.notifications.presenters;
 
 public class NotificationPresenterProvider {
 

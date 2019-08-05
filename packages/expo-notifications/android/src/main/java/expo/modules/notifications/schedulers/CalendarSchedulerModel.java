@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.schedulers;
+package expo.modules.notifications.schedulers;
 
 import android.content.Intent;
 import android.os.SystemClock;
@@ -20,10 +20,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import host.exp.exponent.notifications.helpers.ExpoCronDefinitionBuilder;
-import host.exp.exponent.notifications.helpers.HashMapSerializer;
-import host.exp.exponent.notifications.managers.SchedulersManagerProxy;
-import host.exp.exponent.notifications.managers.SchedulersDatabase;
+import expo.modules.notifications.helpers.ExpoCronDefinitionBuilder;
+import expo.modules.notifications.helpers.HashMapSerializer;
+import expo.modules.notifications.managers.SchedulersManagerProxy;
+import expo.modules.notifications.managers.SchedulersDatabase;
 
 @Table(databaseName = SchedulersDatabase.NAME)
 public class CalendarSchedulerModel extends BaseModel implements SchedulerModel {

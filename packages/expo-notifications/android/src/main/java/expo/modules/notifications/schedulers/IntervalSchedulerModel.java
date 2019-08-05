@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.schedulers;
+package expo.modules.notifications.schedulers;
 
 import android.content.Context;
 import android.content.Intent;
@@ -17,9 +17,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
-import host.exp.exponent.notifications.helpers.HashMapSerializer;
-import host.exp.exponent.notifications.managers.SchedulersManagerProxy;
-import host.exp.exponent.notifications.managers.SchedulersDatabase;
+import expo.modules.notifications.helpers.HashMapSerializer;
+import expo.modules.notifications.managers.SchedulersManagerProxy;
+import expo.modules.notifications.managers.SchedulersDatabase;
 
 @Table(databaseName = SchedulersDatabase.NAME)
 public class IntervalSchedulerModel extends BaseModel implements SchedulerModel {

@@ -1,10 +1,10 @@
-package host.exp.exponent.notifications.receivers;
+package expo.modules.notifications.receivers;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 
-import host.exp.exponent.notifications.managers.SchedulersManagerProxy;
+import expo.modules.notifications.managers.SchedulersManagerProxy;
 
 public class SchedulingTriggerReceiver extends BroadcastReceiver {
 

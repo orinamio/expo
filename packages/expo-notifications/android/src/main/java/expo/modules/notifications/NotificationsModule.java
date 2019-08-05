@@ -1,6 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
-package versioned.host.exp.exponent.modules.api.notifications;
+package expo.modules.notifications;
 
 import com.cronutils.model.Cron;
 
@@ -41,33 +41,33 @@ import java.util.Random;
 
 import javax.inject.Inject;
 
-import host.exp.exponent.Constants;
-import host.exp.exponent.ExponentManifest;
-import host.exp.exponent.di.NativeModuleDepsProvider;
-import host.exp.exponent.network.ExponentNetwork;
-import host.exp.exponent.notifications.NotificationActionCenter;
-import host.exp.exponent.notifications.NotificationHelper;
-import host.exp.exponent.notifications.channels.ChannelManager;
-import host.exp.exponent.notifications.channels.ChannelPOJO;
-import host.exp.exponent.notifications.channels.ChannelScopeManager;
-import host.exp.exponent.notifications.schedulers.IntervalSchedulerModel;
-import host.exp.exponent.notifications.schedulers.SchedulerImpl;
-import host.exp.exponent.notifications.postoffice.Mailbox;
-import host.exp.exponent.notifications.postoffice.PostOfficeProxy;
-import host.exp.exponent.notifications.presenters.NotificationPresenterImpl;
-import host.exp.exponent.notifications.presenters.NotificationPresenter;
-import host.exp.exponent.storage.ExponentSharedPreferences;
-import host.exp.exponent.notifications.exceptions.UnableToScheduleException;
-import host.exp.exponent.notifications.managers.SchedulersManagerProxy;
-import host.exp.exponent.notifications.schedulers.CalendarSchedulerModel;
+import expo.modules.notifications.Constants;
+import expo.modules.notifications.ExponentManifest;
+import expo.modules.notifications.di.NativeModuleDepsProvider;
+import expo.modules.notifications.network.ExponentNetwork;
+import expo.modules.notifications.NotificationActionCenter;
+import expo.modules.notifications.NotificationHelper;
+import expo.modules.notifications.channels.ChannelManager;
+import expo.modules.notifications.channels.ChannelPOJO;
+import expo.modules.notifications.channels.ChannelScopeManager;
+import expo.modules.notifications.schedulers.IntervalSchedulerModel;
+import expo.modules.notifications.schedulers.SchedulerImpl;
+import expo.modules.notifications.postoffice.Mailbox;
+import expo.modules.notifications.postoffice.PostOfficeProxy;
+import expo.modules.notifications.presenters.NotificationPresenterImpl;
+import expo.modules.notifications.presenters.NotificationPresenter;
+import expo.modules.notifications.storage.ExponentSharedPreferences;
+import expo.modules.notifications.exceptions.UnableToScheduleException;
+import expo.modules.notifications.managers.SchedulersManagerProxy;
+import expo.modules.notifications.schedulers.CalendarSchedulerModel;
 import host.exp.expoview.R;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_NAME;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
-import static host.exp.exponent.notifications.helpers.ExpoCronParser.createCronInstance;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_NAME;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
+import static expo.modules.notifications.helpers.ExpoCronParser.createCronInstance;
 
 public class NotificationsModule extends ReactContextBaseJavaModule implements RegistryLifecycleListener, Mailbox {
 

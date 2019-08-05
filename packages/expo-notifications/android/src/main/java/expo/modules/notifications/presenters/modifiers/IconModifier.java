@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters.modifiers;
+package expo.modules.notifications.presenters.modifiers;
 
 import android.content.Context;
 import android.graphics.Bitmap;
@@ -19,7 +19,7 @@ import java.util.concurrent.Executor;
 
 import host.exp.expoview.R;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_ICON;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ICON;
 
 public class IconModifier implements NotificationModifier {
   @Override

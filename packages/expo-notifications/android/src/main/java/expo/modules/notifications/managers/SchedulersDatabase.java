@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.managers;
+package expo.modules.notifications.managers;
 
 import com.raizlabs.android.dbflow.annotation.Database;
 

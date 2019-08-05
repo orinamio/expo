@@ -1,6 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 public class NotificationConstants {
   public static final int MAX_COLLAPSED_NOTIFICATIONS = 5;
@@ -16,6 +16,7 @@ public class NotificationConstants {
   public static final String NOTIFICATION_UNREAD_COUNT_KEY = "#{unread_notifications}";
   public static final String NOTIFICATION_REMOTE_KEY = "remote";
   public static final String NOTIFICATION_ACTION_TYPE = "actionId";
+  public static final String NOTIFICATION_ACTION_TYPE_KEY = "actionType";
   public static final String NOTIFICATION_INPUT_TEXT = "userText";
 
   public static final String NOTIFICATION_DEFAULT_CHANNEL_ID = "expo-default";

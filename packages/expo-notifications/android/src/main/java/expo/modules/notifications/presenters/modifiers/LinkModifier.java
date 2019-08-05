@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.presenters.modifiers;
+package expo.modules.notifications.presenters.modifiers;
 
 import android.app.PendingIntent;
 import android.content.Context;
@@ -9,7 +9,7 @@ import android.support.v4.app.NotificationCompat;
 
 import java.util.UUID;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_LINK;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_LINK;
 
 public class LinkModifier implements NotificationModifier {
   @Override

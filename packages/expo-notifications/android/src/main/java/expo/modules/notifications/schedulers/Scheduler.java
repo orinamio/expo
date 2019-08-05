@@ -1,7 +1,7 @@
-package host.exp.exponent.notifications.schedulers;
+package expo.modules.notifications.schedulers;
 
 import android.content.Context;
-import host.exp.exponent.notifications.exceptions.UnableToScheduleException;
+import expo.modules.notifications.exceptions.UnableToScheduleException;
 
 public interface Scheduler {
 

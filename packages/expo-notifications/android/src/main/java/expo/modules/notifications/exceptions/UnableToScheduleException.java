@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.exceptions;
+package expo.modules.notifications.exceptions;
 
 import org.unimodules.core.errors.CodedException;
 

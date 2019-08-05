@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.managers;
+package expo.modules.notifications.managers;
 
 import android.content.Context;
 
@@ -7,7 +7,7 @@ import org.unimodules.core.interfaces.Function;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 
-import host.exp.exponent.notifications.schedulers.Scheduler;
+import expo.modules.notifications.schedulers.Scheduler;
 
 public class SchedulersManagerProxy implements SchedulersManager {
 

@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.managers;
+package expo.modules.notifications.managers;
 
 import android.content.Context;
 import com.raizlabs.android.dbflow.sql.language.Select;
@@ -10,12 +10,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import host.exp.exponent.notifications.exceptions.UnableToScheduleException;
-import host.exp.exponent.notifications.schedulers.Scheduler;
-import host.exp.exponent.notifications.schedulers.SchedulerModel;
-import host.exp.exponent.notifications.schedulers.CalendarSchedulerModel;
-import host.exp.exponent.notifications.schedulers.IntervalSchedulerModel;
-import host.exp.exponent.notifications.schedulers.SchedulerImpl;
+import expo.modules.notifications.exceptions.UnableToScheduleException;
+import expo.modules.notifications.schedulers.Scheduler;
+import expo.modules.notifications.schedulers.SchedulerModel;
+import expo.modules.notifications.schedulers.CalendarSchedulerModel;
+import expo.modules.notifications.schedulers.IntervalSchedulerModel;
+import expo.modules.notifications.schedulers.SchedulerImpl;
 
 class SchedulerManagerImpl implements SchedulersManager {
 

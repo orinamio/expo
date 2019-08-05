@@ -1,12 +1,12 @@
-package host.exp.exponent.notifications.schedulers;
+package expo.modules.notifications.schedulers;
 
 import android.content.Context;
 
 import java.util.HashMap;
 
-import host.exp.exponent.notifications.ExponentNotificationManager;
-import host.exp.exponent.notifications.exceptions.UnableToScheduleException;
-import host.exp.exponent.notifications.insecurecheduler.ThreadSafeInsecureScheduler;
+import expo.modules.notifications.ExponentNotificationManager;
+import expo.modules.notifications.exceptions.UnableToScheduleException;
+import expo.modules.notifications.insecurescheduler.ThreadSafeInsecureScheduler;
 
 public class SchedulerImpl implements Scheduler {
 

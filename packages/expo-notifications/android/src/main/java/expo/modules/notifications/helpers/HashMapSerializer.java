@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.helpers;
+package expo.modules.notifications.helpers;
 
 import org.json.JSONArray;
 import org.json.JSONException;

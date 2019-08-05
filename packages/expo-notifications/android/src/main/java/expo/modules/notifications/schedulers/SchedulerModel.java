@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.schedulers;
+package expo.modules.notifications.schedulers;
 
 import java.util.HashMap;
 

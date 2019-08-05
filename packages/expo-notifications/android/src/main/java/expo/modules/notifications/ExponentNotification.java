@@ -1,6 +1,6 @@
 // Copyright 2015-present 650 Industries. All rights reserved.
 
-package host.exp.exponent.notifications;
+package expo.modules.notifications;
 
 import org.json.JSONException;
 import org.json.JSONObject;

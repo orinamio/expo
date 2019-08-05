@@ -1,19 +1,19 @@
-package host.exp.exponent.notifications.userinteractionreceiver;
+package expo.modules.notifications.userinteractionreceiver;
 
 import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NotificationManagerCompat;
 
-import host.exp.exponent.kernel.KernelConstants;
-import host.exp.exponent.notifications.ExponentNotificationManager;
-import host.exp.exponent.notifications.NotificationActionCenter;
-import host.exp.exponent.notifications.NotificationConstants;
-import host.exp.exponent.notifications.postoffice.PostOfficeProxy;
+import expo.modules.notifications.ExponentNotificationManager;
+import expo.modules.notifications.NotificationActionCenter;
+import expo.modules.notifications.NotificationConstants;
+import expo.modules.notifications.postoffice.PostOfficeProxy;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_STICKY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ACTION_TYPE_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_STICKY;
 
 public class UserInteractionReceiver {
 
@@ -30,7 +30,7 @@ public class UserInteractionReceiver {
 
   public static boolean onIntent(Intent intent, Context context) {
     Bundle bundle = intent.getExtras();
-    Bundle notification = bundle.getBundle(KernelConstants.NOTIFICATION_OBJECT_KEY);
+    Bundle notification = bundle.getBundle(NOTIFICATION_OBJECT_KEY);
 
     if (notification == null) {
       return false;
@@ -45,10 +45,10 @@ public class UserInteractionReceiver {
     }
 
     // Add action type
-    if (bundle.containsKey(KernelConstants.NOTIFICATION_ACTION_TYPE_KEY)) {
+    if (bundle.containsKey(NOTIFICATION_ACTION_TYPE_KEY)) {
       notification.putString(
           NotificationConstants.NOTIFICATION_ACTION_TYPE,
-          bundle.getString(KernelConstants.NOTIFICATION_ACTION_TYPE_KEY)
+          bundle.getString(NOTIFICATION_ACTION_TYPE_KEY)
       );
     }
     // Add remote input

@@ -1,16 +1,16 @@
-package host.exp.exponent.notifications.presenters.modifiers;
+package expo.modules.notifications.presenters.modifiers;
 
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
-import host.exp.exponent.Constants;
-import host.exp.exponent.kernel.KernelConstants;
-import host.exp.exponent.notifications.IntentProvider;
-import host.exp.exponent.notifications.NotificationActionCenter;
+import expo.modules.notifications.Constants;
+import expo.modules.notifications.kernel.KernelConstants;
+import expo.modules.notifications.IntentProvider;
+import expo.modules.notifications.NotificationActionCenter;
 
-import static host.exp.exponent.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
 
 public class CategoryModifier implements NotificationModifier {
   @Override

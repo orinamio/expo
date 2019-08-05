@@ -1,4 +1,4 @@
-package host.exp.exponent.notifications.postoffice;
+package expo.modules.notifications.postoffice;
 
 import android.os.Bundle;
 
