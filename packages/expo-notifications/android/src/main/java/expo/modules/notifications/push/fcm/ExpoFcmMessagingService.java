@@ -1,4 +1,4 @@
-package expo.modules.notifications.fcm;
+package expo.modules.notifications.push.fcm;
 
 import android.os.Bundle;
 

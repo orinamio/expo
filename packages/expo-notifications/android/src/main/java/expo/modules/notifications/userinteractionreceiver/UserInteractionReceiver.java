@@ -28,7 +28,7 @@ public class UserInteractionReceiver {
     return mInstance;
   }
 
-  public static boolean onIntent(Intent intent, Context context) {
+  public boolean onIntent(Intent intent, Context context) {
     Bundle bundle = intent.getExtras();
     Bundle notification = bundle.getBundle(NOTIFICATION_OBJECT_KEY);
 

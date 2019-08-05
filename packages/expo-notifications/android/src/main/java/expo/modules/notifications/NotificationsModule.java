@@ -108,7 +108,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   @ExpoMethod
-  public void getDevicePushTokenAsync(final Promise promise) {
+  public void getPushTokenAsync(final Promise promise) {
     FirebaseInstanceId.getInstance().getInstanceId()
         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
           @Override
