@@ -29,6 +29,11 @@ public class ExpoFcmMessagingService extends FirebaseMessagingService {
     Bundle bundle = new Bundle();
     String appId = remoteMessage.getData().get(NOTIFICATION_APP_ID_KEY);
 
+    /*
+      We do not scope here!!!
+      Data have to be scoped on Expo sever or by user!
+     */
+
     bundle.putString(NOTIFICATION_APP_ID_KEY, appId);
     bundle.putString(NOTIFICATION_CHANNEL_ID, remoteMessage.getData().get(NOTIFICATION_CHANNEL_ID));
     bundle.putString(NOTIFICATION_BODY, remoteMessage.getData().get("message"));

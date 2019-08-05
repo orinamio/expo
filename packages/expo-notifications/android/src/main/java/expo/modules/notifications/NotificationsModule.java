@@ -18,7 +18,6 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
-import org.json.JSONException;
 import org.unimodules.core.ExportedModule;
 import org.unimodules.core.ModuleRegistry;
 import org.unimodules.core.Promise;
@@ -36,7 +35,8 @@ import java.util.Random;
 import expo.modules.notifications.action.NotificationActionCenter;
 import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
-import expo.modules.notifications.channels.ChannelScopeManager;
+import expo.modules.notifications.channels.ThreadSafeChannelManager;
+import expo.modules.notifications.provider.AppIdProvider;
 import expo.modules.notifications.schedulers.IntervalSchedulerModel;
 import expo.modules.notifications.schedulers.SchedulerImpl;
 import expo.modules.notifications.postoffice.Mailbox;
@@ -46,6 +46,8 @@ import expo.modules.notifications.presenters.NotificationPresenter;
 import expo.modules.notifications.exceptions.UnableToScheduleException;
 import expo.modules.notifications.managers.SchedulersManagerProxy;
 import expo.modules.notifications.schedulers.CalendarSchedulerModel;
+import expo.modules.notifications.scoper.NotificationScoper;
+import expo.modules.notifications.scoper.StringScoper;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID;
@@ -100,8 +102,9 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     promise.resolve(null);
   }
 
-  protected String getProperString(String string) { // scoped version return expId+":"+string;
-    return string;
+  protected String getProperString(String string) { // scoped version return appIdId+":"+string;
+    StringScoper stringScoper = mModuleRegistry.getModule(StringScoper.class);
+    return stringScoper.getScopedString(string);
   }
 
   @ExpoMethod
@@ -121,10 +124,10 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   @ExpoMethod
   public void createChannel(String channelId, final HashMap data, final Promise promise) {
-    HashMap channelData = data;
-    channelData.put(NOTIFICATION_CHANNEL_ID, channelId);
+    channelId = getProperString(channelId);
+    data.put(NOTIFICATION_CHANNEL_ID, channelId);
 
-    ChannelPOJO channelPOJO = ChannelPOJO.createChannelPOJO(channelData);
+    ChannelPOJO channelPOJO = ChannelPOJO.createChannelPOJO(data);
 
     mChannelManager.addChannel(channelId, channelPOJO, mContext.getApplicationContext());
     promise.resolve(null);
@@ -132,13 +135,13 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   @ExpoMethod
   public void deleteChannel(String channelId, final Promise promise) {
+    channelId = getProperString(channelId);
     mChannelManager.deleteChannel(channelId, mContext.getApplicationContext());
     promise.resolve(null);
   }
 
   @ExpoMethod
   public void createChannelGroup(String groupId, String groupName, final Promise promise) {
-    groupId = getProperString(groupId);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationManager notificationManager =
           (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -149,7 +152,6 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   @ExpoMethod
   public void deleteChannelGroup(String groupId, final Promise promise) {
-    groupId = getProperString(groupId);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationManager notificationManager =
           (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
@@ -159,7 +161,9 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   @ExpoMethod
-  public void presentLocalNotification(final HashMap data, final Promise promise) {
+  public void presentLocalNotification(HashMap data, final Promise promise) {
+    data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
+
     Bundle bundle = new MapArguments(data).toBundle();
     bundle.putString(NOTIFICATION_APP_ID_KEY, mAppId);
 
@@ -224,10 +228,9 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   @ExpoMethod
-  public void scheduleNotificationWithTimer(final HashMap<String, Object> data, final HashMap<String, Object> options, final Promise promise) {
-    if (data.containsKey("categoryId")) {
-      data.put("categoryId", getProperString((String)data.get("categoryId")));
-    }
+  public void scheduleNotificationWithTimer(HashMap<String, Object> data, final HashMap<String, Object> options, final Promise promise) {
+    data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
+
     HashMap<String, Object> details = new HashMap<>();
     details.put("data", data);
 
@@ -256,10 +259,9 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   @ExpoMethod
-  public void scheduleNotificationWithCalendar(final HashMap options, final HashMap data, final Promise promise) {
-    if (data.containsKey("categoryId")) {
-      data.put("categoryId", getProperString((String)data.get("categoryId")));
-    }
+  public void scheduleNotificationWithCalendar(HashMap data, final HashMap options, final Promise promise) {
+    data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
+
     HashMap<String, Object> details = new HashMap<>();
     details.put("data", data);
 
@@ -288,15 +290,12 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   public void onCreate(ModuleRegistry moduleRegistry) {
     mModuleRegistry = moduleRegistry;
-    try {
-      mAppId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY); // IdProvider
-    } catch (JSONException e) {
-      e.printStackTrace();
-    }
+
+    AppIdProvider appIdProvider = moduleRegistry.getModule(AppIdProvider.class);
+    mAppId = appIdProvider.getAppId();
 
     createDefaultChannel();
-
-    mChannelManager = new ChannelScopeManager(mAppId);
+    mChannelManager = getChannelManager();
 
     PostOfficeProxy.getInstance().registerModuleAndGetPendingDeliveries(mAppId, this);
   }
@@ -309,6 +308,10 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
       NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
       notificationManager.createNotificationChannel(channel);
     }
+  }
+
+  protected ChannelManager getChannelManager() {
+    return ThreadSafeChannelManager.getInstance();
   }
 
   public void onDestory() {

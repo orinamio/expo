@@ -4,14 +4,16 @@ import android.content.Context;
 
 import java.util.concurrent.Future;
 
+import expo.modules.notifications.scoper.StringScoper;
+
 public class ChannelScopeManager implements ChannelManager {
 
-  private String mappId = null;
+  private StringScoper mStringScoper = null;
 
   ChannelManager nextChannelManager = ThreadSafeChannelManager.getInstance();
 
-  public ChannelScopeManager(String appId) {
-    mappId = appId;
+  public ChannelScopeManager(StringScoper stringScoper) {
+    mStringScoper = stringScoper;
   }
 
   @Override
@@ -34,10 +36,7 @@ public class ChannelScopeManager implements ChannelManager {
   }
 
   private String scope(String text) {
-    if (text == null) {
-      return null;
-    }
-    return mappId + ":" + text;
+    return mStringScoper.getScopedString(text);
   }
 
   private ChannelPOJO scope(ChannelPOJO channelPOJO) {
