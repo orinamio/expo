@@ -13,25 +13,19 @@ import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
 import android.support.annotation.NonNull;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.Promise;
-import com.facebook.react.bridge.ReactApplicationContext;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.ReactContextBaseJavaModule;
-import com.facebook.react.bridge.ReactMethod;
-import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
-import org.json.JSONObject;
+import org.unimodules.core.ExportedModule;
 import org.unimodules.core.ModuleRegistry;
+import org.unimodules.core.Promise;
 import org.unimodules.core.arguments.MapArguments;
+import org.unimodules.core.interfaces.ExpoMethod;
 import org.unimodules.core.interfaces.RegistryLifecycleListener;
+import org.unimodules.core.interfaces.services.EventEmitter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -39,14 +33,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
-import javax.inject.Inject;
-
-import expo.modules.notifications.Constants;
-import expo.modules.notifications.ExponentManifest;
-import expo.modules.notifications.di.NativeModuleDepsProvider;
-import expo.modules.notifications.network.ExponentNetwork;
-import expo.modules.notifications.NotificationActionCenter;
-import expo.modules.notifications.NotificationHelper;
 import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
 import expo.modules.notifications.channels.ChannelScopeManager;
@@ -56,11 +42,9 @@ import expo.modules.notifications.postoffice.Mailbox;
 import expo.modules.notifications.postoffice.PostOfficeProxy;
 import expo.modules.notifications.presenters.NotificationPresenterImpl;
 import expo.modules.notifications.presenters.NotificationPresenter;
-import expo.modules.notifications.storage.ExponentSharedPreferences;
 import expo.modules.notifications.exceptions.UnableToScheduleException;
 import expo.modules.notifications.managers.SchedulersManagerProxy;
 import expo.modules.notifications.schedulers.CalendarSchedulerModel;
-import host.exp.expoview.R;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID;
@@ -69,32 +53,22 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPE
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
 import static expo.modules.notifications.helpers.ExpoCronParser.createCronInstance;
 
-public class NotificationsModule extends ReactContextBaseJavaModule implements RegistryLifecycleListener, Mailbox {
+public class NotificationsModule extends ExportedModule implements RegistryLifecycleListener, Mailbox {
 
   private static final String TAG = NotificationsModule.class.getSimpleName();
-
-  @Inject
-  ExponentSharedPreferences mExponentSharedPreferences;
-
-  @Inject
-  ExponentNetwork mExponentNetwork;
-
-  private final JSONObject mManifest;
-
-  private ReactContext mReactContext;
 
   private static final String ON_USER_INTERACTION_EVENT = "Exponent.onUserInteraction";
   private static final String ON_FOREGROUND_NOTIFICATION_EVENT = "Exponent.onForegroundNotification";
 
+  private Context mContext;
   private String mExperienceId;
   private ChannelManager mChannelManager;
 
-  public NotificationsModule(ReactApplicationContext reactContext,
-                             JSONObject manifest, Map<String, Object> experienceProperties) {
-    super(reactContext);
-    NativeModuleDepsProvider.getInstance().inject(NotificationsModule.class, this);
-    mManifest = manifest;
-    mReactContext = reactContext;
+  private ModuleRegistry mModuleRegistry = null;
+
+  public NotificationsModule(Context context) {
+    super(context);
+    mContext = context;
   }
 
   @Override
@@ -102,12 +76,12 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     return "ExponentNotifications";
   }
 
-  @ReactMethod
-  public void createCategoryAsync(final String categoryIdParam, final ReadableArray actions, final Promise promise) {
-    String categoryId = getScopedIdIfNotDetached(categoryIdParam);
+  @ExpoMethod
+  public void createCategoryAsync(final String categoryIdParam, final List<HashMap<String, Object>> actions, final Promise promise) {
+    String categoryId = getProperString(categoryIdParam);
     List<Map<String, Object>> newActions = new ArrayList<>();
 
-    for (Object actionObject : actions.toArrayList()) {
+    for (Object actionObject : actions) {
       if (actionObject instanceof Map) {
         Map<String, Object> action = (Map<String, Object>) actionObject;
         newActions.add(action);
@@ -118,25 +92,19 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     promise.resolve(null);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void deleteCategoryAsync(final String categoryIdParam, final Promise promise) {
-    String categoryId = getScopedIdIfNotDetached(categoryIdParam);
+    String categoryId = getProperString(categoryIdParam);
     NotificationActionCenter.removeCategory(categoryId);
     promise.resolve(null);
   }
 
-  private String getScopedIdIfNotDetached(String string) {
-    if (!Constants.isStandaloneApp()) {
-      return mExperienceId + ":" + string;
-    }
+  protected String getProperString(String string) { // scoped version return expId+":"+string;
     return string;
   }
 
-  @ReactMethod
-  public void getDevicePushTokenAsync(final ReadableMap config, final Promise promise) {
-    if (!Constants.isStandaloneApp()) {
-      promise.reject("getDevicePushTokenAsync is only accessible within standalone applications");
-    }
+  @ExpoMethod
+  public void getDevicePushTokenAsync(final Promise promise) {
     FirebaseInstanceId.getInstance().getInstanceId()
         .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
           @Override
@@ -150,68 +118,48 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
         });
   }
 
-  @ReactMethod
-  public void getExponentPushTokenAsync(final Promise promise) {
-    String uuid = mExponentSharedPreferences.getUUID();
-    if (uuid == null) {
-      // This should have been set by ExponentNotificationIntentService when Activity was created/resumed.
-      promise.reject("Couldn't get GCM token on device.");
-      return;
-    }
-
-    NotificationHelper.getPushNotificationToken(uuid, mExperienceId, mExponentNetwork, mExponentSharedPreferences, new NotificationHelper.TokenListener() {
-      @Override
-      public void onSuccess(String token) {
-        promise.resolve(token);
-      }
-
-      @Override
-      public void onFailure(Exception e) {
-        promise.reject("E_GET_GCM_TOKEN_FAILED", "Couldn't get GCM token for device", e);
-      }
-    });
-  }
-
-  @ReactMethod
-  public void createChannel(String channelId, final ReadableMap data, final Promise promise) {
-    HashMap channelData = data.toHashMap();
+  @ExpoMethod
+  public void createChannel(String channelId, final HashMap data, final Promise promise) {
+    HashMap channelData = data;
     channelData.put(NOTIFICATION_CHANNEL_ID, channelId);
 
     ChannelPOJO channelPOJO = ChannelPOJO.createChannelPOJO(channelData);
 
-    mChannelManager.addChannel(channelId, channelPOJO, getReactApplicationContext().getApplicationContext());
+    mChannelManager.addChannel(channelId, channelPOJO, mContext.getApplicationContext());
     promise.resolve(null);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void deleteChannel(String channelId, final Promise promise) {
-    mChannelManager.deleteChannel(channelId, getReactApplicationContext().getApplicationContext());
+    mChannelManager.deleteChannel(channelId, mContext.getApplicationContext());
     promise.resolve(null);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void createChannelGroup(String groupId, String groupName, final Promise promise) {
+    groupId = getProperString(groupId);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationManager notificationManager =
-          (NotificationManager) mReactContext.getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
       notificationManager.createNotificationChannelGroup(new NotificationChannelGroup(groupId, groupName));
     }
     promise.resolve(null);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void deleteChannelGroup(String groupId, final Promise promise) {
+    groupId = getProperString(groupId);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       NotificationManager notificationManager =
-          (NotificationManager) mReactContext.getSystemService(Context.NOTIFICATION_SERVICE);
+          (NotificationManager) mContext.getSystemService(Context.NOTIFICATION_SERVICE);
       notificationManager.deleteNotificationChannelGroup(groupId);
     }
     promise.resolve(null);
   }
 
-  @ReactMethod
-  public void presentLocalNotification(final ReadableMap data, final ReadableMap legacyChannelData, final Promise promise) {
-    Bundle bundle = new MapArguments(data.toHashMap()).toBundle();
+  @ExpoMethod
+  public void presentLocalNotification(final HashMap data, final Promise promise) {
+    Bundle bundle = new MapArguments(data).toBundle();
     bundle.putString(NOTIFICATION_EXPERIENCE_ID_KEY, mExperienceId);
 
     Integer notificationId = Math.abs( new Random().nextInt() );
@@ -219,7 +167,7 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
 
     NotificationPresenter notificationPresenter = new NotificationPresenterImpl();
     notificationPresenter.presentNotification(
-        getReactApplicationContext().getApplicationContext(),
+        mContext.getApplicationContext(),
         mExperienceId,
         bundle,
         notificationId
@@ -228,18 +176,18 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     promise.resolve(notificationId.toString());
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void dismissNotification(final String notificationId, final Promise promise) {
     int id = Integer.parseInt(notificationId);
-    NotificationManager notificationManager = (NotificationManager) mReactContext
+    NotificationManager notificationManager = (NotificationManager) mContext
         .getSystemService(Context.NOTIFICATION_SERVICE);
     notificationManager.cancel(id);
     promise.resolve(null);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void dismissAllNotifications(final Promise promise) {
-    NotificationManager notificationManager = (NotificationManager) mReactContext
+    NotificationManager notificationManager = (NotificationManager) mContext
         .getSystemService(Context.NOTIFICATION_SERVICE);
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
       StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
@@ -256,45 +204,36 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     }
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void cancelScheduledNotificationAsync(final String notificationId, final Promise promise) {
-    SchedulersManagerProxy.getInstance(getReactApplicationContext()
+    SchedulersManagerProxy.getInstance(mContext.getApplicationContext()
         .getApplicationContext())
         .removeScheduler(notificationId);
 
     dismissNotification(notificationId, promise);
   }
 
-  @ReactMethod
+  @ExpoMethod
   public void cancelAllScheduledNotificationsAsync(final Promise promise) {
     SchedulersManagerProxy
-        .getInstance(getReactApplicationContext().getApplicationContext())
+        .getInstance(mContext.getApplicationContext())
         .removeAll(mExperienceId);
 
     dismissAllNotifications(promise);
   }
 
-  @ReactMethod
-  public void scheduleNotificationWithTimer(final ReadableMap data, final ReadableMap optionsMap, final Promise promise) {
-    HashMap<String, Object> options = optionsMap.toHashMap();
-    HashMap<String, Object> hashMap = data.toHashMap();
-    if (data.hasKey("categoryId")) {
-      hashMap.put("categoryId", getScopedIdIfNotDetached(data.getString("categoryId")));
+  @ExpoMethod
+  public void scheduleNotificationWithTimer(final HashMap<String, Object> data, final HashMap<String, Object> options, final Promise promise) {
+    if (data.containsKey("categoryId")) {
+      data.put("categoryId", getProperString((String)data.get("categoryId")));
     }
     HashMap<String, Object> details = new HashMap<>();
-    details.put("data", hashMap);
-    String experienceId;
+    details.put("data", data);
 
-    try {
-      experienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY);
-      details.put("experienceId", experienceId);
-    } catch (Exception e) {
-      promise.reject(new Exception("Requires Experience Id"));
-      return;
-    }
+    details.put("experienceId", mExperienceId);
 
     IntervalSchedulerModel intervalSchedulerModel = new IntervalSchedulerModel();
-    intervalSchedulerModel.setExperienceId(experienceId);
+    intervalSchedulerModel.setExperienceId(mExperienceId);
     intervalSchedulerModel.setDetails(details);
     intervalSchedulerModel.setRepeat(options.containsKey("repeat") && (Boolean) options.get("repeat"));
     intervalSchedulerModel.setScheduledTime(System.currentTimeMillis() + ((Double) options.get("interval")).longValue());
@@ -302,7 +241,7 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
 
     SchedulerImpl scheduler = new SchedulerImpl(intervalSchedulerModel);
 
-    SchedulersManagerProxy.getInstance(getReactApplicationContext().getApplicationContext()).addScheduler(
+    SchedulersManagerProxy.getInstance(mContext.getApplicationContext()).addScheduler(
         scheduler,
         (String id) -> {
           if (id == null) {
@@ -315,36 +254,25 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     );
   }
 
-  @ReactMethod
-  public void scheduleNotificationWithCalendar(final ReadableMap data, final ReadableMap optionsMap, final Promise promise) {
-    HashMap<String, Object> options = optionsMap.toHashMap();
-    HashMap<String, Object> hashMap = data.toHashMap();
-    if (data.hasKey("categoryId")) {
-      hashMap.put("categoryId", getScopedIdIfNotDetached(data.getString("categoryId")));
+  @ExpoMethod
+  public void scheduleNotificationWithCalendar(final HashMap options, final HashMap data, final Promise promise) {
+    if (data.containsKey("categoryId")) {
+      data.put("categoryId", getProperString((String)data.get("categoryId")));
     }
     HashMap<String, Object> details = new HashMap<>();
-    details.put("data", hashMap);
-    String experienceId;
-
-    try {
-      experienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY);
-      details.put("experienceId", experienceId);
-    } catch (Exception e) {
-      promise.reject(new Exception("Requires Experience Id"));
-      return;
-    }
+    details.put("data", data);
 
     Cron cron = createCronInstance(options);
 
     CalendarSchedulerModel calendarSchedulerModel = new CalendarSchedulerModel();
-    calendarSchedulerModel.setExperienceId(experienceId);
+    calendarSchedulerModel.setExperienceId(mExperienceId);
     calendarSchedulerModel.setDetails(details);
     calendarSchedulerModel.setRepeat(options.containsKey("repeat") && (Boolean) options.get("repeat"));
     calendarSchedulerModel.setCalendarData(cron.asString());
 
     SchedulerImpl scheduler = new SchedulerImpl(calendarSchedulerModel);
 
-    SchedulersManagerProxy.getInstance(getReactApplicationContext().getApplicationContext()).addScheduler(
+    SchedulersManagerProxy.getInstance(mContext.getApplicationContext()).addScheduler(
         scheduler,
         (String id) -> {
           if (id == null) {
@@ -357,47 +285,10 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
     );
   }
 
-  @ReactMethod
-  public void scheduleLocalNotificationWithChannel(final ReadableMap data, final ReadableMap options, final ReadableMap legacyChannelData, final Promise promise) {
-    String experienceId = mManifest.optString(ExponentManifest.MANIFEST_ID_KEY, null);
-    if (legacyChannelData != null) {
-      String channelId = data.getString("channelId");
-      if (channelId == null || experienceId == null) {
-        promise.reject("E_FAILED_PRESENTING_NOTIFICATION", "legacyChannelData was nonnull with no channelId or no experienceId");
-        return;
-      }
-      NotificationHelper.maybeCreateLegacyStoredChannel(
-          getReactApplicationContext(),
-          experienceId,
-          channelId,
-          legacyChannelData.toHashMap());
-    }
-
-    int notificationId = Math.abs(new Random().nextInt(Integer.MAX_VALUE));
-
-    HashMap<String, Object> hashMapOfData = data.toHashMap();
-    hashMapOfData.put("experienceId", experienceId);
-
-    NotificationHelper.scheduleLocalNotification(
-        getReactApplicationContext(),
-        notificationId,
-        hashMapOfData,
-        options.toHashMap(),
-        mManifest,
-        new NotificationHelper.Listener() {
-          public void onSuccess(int id) {
-            promise.resolve(Integer.valueOf(id).toString());
-          }
-
-          public void onFailure(Exception e) {
-            promise.reject(e);
-          }
-        });
-  }
-
   public void onCreate(ModuleRegistry moduleRegistry) {
+    mModuleRegistry = moduleRegistry;
     try {
-      mExperienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY);
+      mExperienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY); // IdProvider
     } catch (JSONException e) {
       e.printStackTrace();
     }
@@ -414,7 +305,7 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
       CharSequence name = NOTIFICATION_DEFAULT_CHANNEL_NAME;
       int importance = NotificationManager.IMPORTANCE_DEFAULT;
       NotificationChannel channel = new NotificationChannel(NOTIFICATION_DEFAULT_CHANNEL_ID, name, importance);
-      NotificationManager notificationManager = mReactContext.getSystemService(NotificationManager.class);
+      NotificationManager notificationManager = mContext.getSystemService(NotificationManager.class);
       notificationManager.createNotificationChannel(channel);
     }
   }
@@ -425,14 +316,18 @@ public class NotificationsModule extends ReactContextBaseJavaModule implements R
 
   @Override
   public void onUserInteraction(Bundle userInteraction) {
-    mReactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-        .emit(ON_USER_INTERACTION_EVENT, Arguments.fromBundle(userInteraction));
+    EventEmitter eventEmitter = mModuleRegistry.getModule(EventEmitter.class);
+    if (eventEmitter != null) {
+      eventEmitter.emit(ON_USER_INTERACTION_EVENT, userInteraction);
+    }
   }
 
   @Override
   public void onForegroundNotification(Bundle notification) {
-    mReactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-        .emit(ON_FOREGROUND_NOTIFICATION_EVENT, Arguments.fromBundle(notification));
+    EventEmitter eventEmitter = mModuleRegistry.getModule(EventEmitter.class);
+    if (eventEmitter != null) {
+      eventEmitter.emit(ON_FOREGROUND_NOTIFICATION_EVENT, notification);
+    }
   }
 
 }
