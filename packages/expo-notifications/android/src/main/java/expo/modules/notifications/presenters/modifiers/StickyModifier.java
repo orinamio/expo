@@ -8,7 +8,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_STIC
 
 public class StickyModifier implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (!notification.getBoolean(NOTIFICATION_STICKY)) {
       builder.setAutoCancel(true);
     } else {

@@ -14,11 +14,11 @@ public class SmartNotificationPresenter implements NotificationPresenter {
   private NotificationPresenter mNotificationPresenter = new NotificationPresenterImpl();
 
   @Override
-  public void presentNotification(Context context, String experienceId, Bundle notification, int notificationId) {
+  public void presentNotification(Context context, String appId, Bundle notification, int notificationId) {
     if (isInForegroundState()) {
-      PostOfficeProxy.getInstance().sendForegroundNotification(experienceId, notification);
+      PostOfficeProxy.getInstance().sendForegroundNotification(appId, notification);
     } else {
-      mNotificationPresenter.presentNotification(context, experienceId, notification, notificationId);
+      mNotificationPresenter.presentNotification(context, appId, notification, notificationId);
     }
   }
 

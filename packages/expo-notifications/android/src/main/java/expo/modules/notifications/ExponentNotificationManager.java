@@ -50,11 +50,11 @@ public class ExponentNotificationManager {
     NativeModuleDepsProvider.getInstance().inject(ExponentNotificationManager.class, this);
   }
 
-  public static String getScopedChannelId(String experienceId, String channelId) {
+  public static String getScopedChannelId(String appId, String channelId) {
     if (Constants.isStandaloneApp()) {
       return channelId;
     } else {
-      return experienceId + "/" + channelId;
+      return appId + "/" + channelId;
     }
   }
 
@@ -66,13 +66,13 @@ public class ExponentNotificationManager {
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       try {
-        String experienceId = manifest.getString(ExponentManifest.MANIFEST_ID_KEY);
-        if (!mNotificationChannelGroupIds.contains(experienceId)) {
-          String channelName = manifest.optString(ExponentManifest.MANIFEST_NAME_KEY, experienceId);
-          NotificationChannelGroup group = new NotificationChannelGroup(experienceId, channelName);
+        String appId = manifest.getString(ExponentManifest.MANIFEST_ID_KEY);
+        if (!mNotificationChannelGroupIds.contains(appId)) {
+          String channelName = manifest.optString(ExponentManifest.MANIFEST_NAME_KEY, appId);
+          NotificationChannelGroup group = new NotificationChannelGroup(appId, channelName);
           mContext.getSystemService(NotificationManager.class).createNotificationChannelGroup(group);
 
-          mNotificationChannelGroupIds.add(experienceId);
+          mNotificationChannelGroupIds.add(appId);
         }
       } catch (Exception e) {
         EXL.e(TAG, "Could not create notification channel: " + e.getMessage());
@@ -108,18 +108,18 @@ public class ExponentNotificationManager {
     }
   }
 
-  public void createNotificationChannel(String experienceId, NotificationChannel channel) {
+  public void createNotificationChannel(String appId, NotificationChannel channel) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       if (!Constants.isStandaloneApp()) {
-        channel.setGroup(experienceId);
+        channel.setGroup(appId);
       }
       mContext.getSystemService(NotificationManager.class).createNotificationChannel(channel);
     }
   }
 
-  public void saveChannelSettings(String experienceId, String channelId, HashMap details) {
+  public void saveChannelSettings(String appId, String channelId, HashMap details) {
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         metadata = new JSONObject();
       }
@@ -136,15 +136,15 @@ public class ExponentNotificationManager {
       allChannels.put(channelId, channel);
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_NOTIFICATION_CHANNELS, allChannels);
 
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       EXL.e(TAG, "Could not store channel in shared preferences: " + e.getMessage());
     }
   }
 
-  public JSONObject readChannelSettings(String experienceId, String channelId) {
+  public JSONObject readChannelSettings(String appId, String channelId) {
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         metadata = new JSONObject();
       }
@@ -163,25 +163,25 @@ public class ExponentNotificationManager {
     return null;
   }
 
-  public NotificationChannel getNotificationChannel(String experienceId, String channelId) {
+  public NotificationChannel getNotificationChannel(String appId, String channelId) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      return mContext.getSystemService(NotificationManager.class).getNotificationChannel(getScopedChannelId(experienceId, channelId));
+      return mContext.getSystemService(NotificationManager.class).getNotificationChannel(getScopedChannelId(appId, channelId));
     } else {
       return null;
     }
   }
 
-  public void deleteNotificationChannel(String experienceId, String channelId) {
+  public void deleteNotificationChannel(String appId, String channelId) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      mContext.getSystemService(NotificationManager.class).deleteNotificationChannel(getScopedChannelId(experienceId, channelId));
+      mContext.getSystemService(NotificationManager.class).deleteNotificationChannel(getScopedChannelId(appId, channelId));
     }
   }
 
-  public void notify(String experienceId, int id, Notification notification) {
-    NotificationManagerCompat.from(mContext).notify(experienceId, id, notification);
+  public void notify(String appId, int id, Notification notification) {
+    NotificationManagerCompat.from(mContext).notify(appId, id, notification);
 
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         metadata = new JSONObject();
       }
@@ -192,16 +192,16 @@ public class ExponentNotificationManager {
       }
       notifications.put(id);
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_ALL_NOTIFICATION_IDS, notifications);
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
-  public void cancel(String experienceId, int id) {
+  public void cancel(String appId, int id) {
     NotificationManagerCompat.from(mContext).cancel(id);
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         return;
       }
@@ -216,15 +216,15 @@ public class ExponentNotificationManager {
         }
       }
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_ALL_NOTIFICATION_IDS, newNotifications);
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
-  public void cancelAll(String experienceId) {
+  public void cancelAll(String appId) {
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         return;
       }
@@ -234,21 +234,21 @@ public class ExponentNotificationManager {
       }
       NotificationManagerCompat manager = NotificationManagerCompat.from(mContext);
       for (int i = 0; i < notifications.length(); i++) {
-        manager.cancel(experienceId, notifications.getInt(i));
+        manager.cancel(appId, notifications.getInt(i));
       }
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_ALL_NOTIFICATION_IDS, null);
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_UNREAD_REMOTE_NOTIFICATIONS, null);
 
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
-  public void schedule(String experienceId, int id, HashMap notification, long time, Long interval) throws ClassNotFoundException {
+  public void schedule(String appId, int id, HashMap notification, long time, Long interval) throws ClassNotFoundException {
     Intent notificationIntent = new Intent(mContext, ScheduledNotificationReceiver.class);
 
-    notificationIntent.setType(experienceId);
+    notificationIntent.setType(appId);
     notificationIntent.setAction(String.valueOf(id));
 
     notificationIntent.putExtra(KernelConstants.NOTIFICATION_ID_KEY, id);
@@ -265,7 +265,7 @@ public class ExponentNotificationManager {
     }
 
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         metadata = new JSONObject();
       }
@@ -276,28 +276,28 @@ public class ExponentNotificationManager {
       }
       notifications.put(id);
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_ALL_SCHEDULED_NOTIFICATION_IDS, notifications);
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
-  public void cancelScheduled(String experienceId, int id) throws ClassNotFoundException {
+  public void cancelScheduled(String appId, int id) throws ClassNotFoundException {
     Intent notificationIntent = new Intent(mContext, ScheduledNotificationReceiver.class);
 
-    notificationIntent.setType(experienceId);
+    notificationIntent.setType(appId);
     notificationIntent.setAction(String.valueOf(id));
 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(mContext, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     AlarmManager alarmManager = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
 
     alarmManager.cancel(pendingIntent);
-    cancel(experienceId, id);
+    cancel(appId, id);
   }
 
-  public void cancelAllScheduled(String experienceId) throws ClassNotFoundException {
+  public void cancelAllScheduled(String appId) throws ClassNotFoundException {
     try {
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         return;
       }
@@ -306,10 +306,10 @@ public class ExponentNotificationManager {
         return;
       }
       for (int i = 0; i < notifications.length(); i++) {
-        cancelScheduled(experienceId, notifications.getInt(i));
+        cancelScheduled(appId, notifications.getInt(i));
       }
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_ALL_SCHEDULED_NOTIFICATION_IDS, null);
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }

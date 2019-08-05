@@ -11,7 +11,7 @@ import expo.modules.notifications.managers.SchedulersManagerProxy;
 import expo.modules.notifications.helpers.Utils;
 import expo.modules.notifications.presenters.NotificationPresenterProvider;
 
-import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_APP_ID_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
 
@@ -23,7 +23,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
     int notificationId = bundle.getInt(NOTIFICATION_ID_KEY, 0);
     String schedulerId = (String) details.get(SchedulersManagerProxy.SCHEDULER_ID);
 
-    ThreadSafeInsecureScheduler.getInstance().cancelScheduled(NOTIFICATION_EXPERIENCE_ID_KEY, notificationId, context);
+    ThreadSafeInsecureScheduler.getInstance().cancelScheduled(NOTIFICATION_APP_ID_KEY, notificationId, context);
 
     SchedulersManagerProxy.getInstance(context).rescheduleOrDelete(schedulerId);
 
@@ -31,7 +31,7 @@ public class ScheduledNotificationReceiver extends BroadcastReceiver {
 
     NotificationPresenterProvider.getNotificationPresenter().presentNotification(
         context.getApplicationContext(),
-        notification.getString("experienceId"),
+        notification.getString("appId"),
         notification,
         notificationId
     );

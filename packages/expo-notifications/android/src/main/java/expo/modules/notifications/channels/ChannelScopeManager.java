@@ -6,12 +6,12 @@ import java.util.concurrent.Future;
 
 public class ChannelScopeManager implements ChannelManager {
 
-  private String mExperienceId = null;
+  private String mappId = null;
 
   ChannelManager nextChannelManager = ThreadSafeChannelManager.getInstance();
 
-  public ChannelScopeManager(String experienceId) {
-    mExperienceId = experienceId;
+  public ChannelScopeManager(String appId) {
+    mappId = appId;
   }
 
   @Override
@@ -37,7 +37,7 @@ public class ChannelScopeManager implements ChannelManager {
     if (text == null) {
       return null;
     }
-    return mExperienceId + ":" + text;
+    return mappId + ":" + text;
   }
 
   private ChannelPOJO scope(ChannelPOJO channelPOJO) {

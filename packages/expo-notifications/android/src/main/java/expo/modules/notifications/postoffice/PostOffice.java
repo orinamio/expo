@@ -20,33 +20,33 @@ class PostOffice implements ExpoPostOffice {
   private Map<String, Mailbox> mMailBoxes = new HashMap<>();
 
   @Override
-  public void notifyAboutUserInteraction(String experienceId, Bundle userInteraction) {
-    if (mMailBoxes.containsKey(experienceId)) {
-      mMailBoxes.get(experienceId).onUserInteraction(userInteraction);
+  public void notifyAboutUserInteraction(String appId, Bundle userInteraction) {
+    if (mMailBoxes.containsKey(appId)) {
+      mMailBoxes.get(appId).onUserInteraction(userInteraction);
     } else {
-      addUserInteractionToDatabase(experienceId, userInteraction);
+      addUserInteractionToDatabase(appId, userInteraction);
     }
   }
 
   @Override
-  public void sendForegroundNotification(String experienceId, Bundle notification) {
-    if (mMailBoxes.containsKey(experienceId)) {
-      mMailBoxes.get(experienceId).onForegroundNotification(notification);
+  public void sendForegroundNotification(String appId, Bundle notification) {
+    if (mMailBoxes.containsKey(appId)) {
+      mMailBoxes.get(appId).onForegroundNotification(notification);
     } else {
-      addForegroundNotificationToDatabase(experienceId, notification);
+      addForegroundNotificationToDatabase(appId, notification);
     }
   }
 
   @Override
-  public void registerModuleAndGetPendingDeliveries(String experienceId, Mailbox mailbox) {
-    mMailBoxes.put(experienceId, mailbox);
+  public void registerModuleAndGetPendingDeliveries(String appId, Mailbox mailbox) {
+    mMailBoxes.put(appId, mailbox);
 
     List<PendingForegroundNotification> pendingForegroundNotificationList = new Select().from(PendingForegroundNotification.class)
-        .where(Condition.column(PendingForegroundNotification$Table.EXPERIENCEID).is(experienceId))
+        .where(Condition.column(PendingForegroundNotification$Table.appId).is(appId))
         .queryList();
 
     List<PendingUserInteraction> pendingUserInteractionList = new Select().from(PendingUserInteraction.class)
-        .where(Condition.column(PendingUserInteraction$Table.EXPERIENCEID).is(experienceId))
+        .where(Condition.column(PendingUserInteraction$Table.appId).is(appId))
         .queryList();
 
     for (PendingForegroundNotification pendingForegroundNotification : pendingForegroundNotificationList) {
@@ -65,20 +65,20 @@ class PostOffice implements ExpoPostOffice {
   }
 
   @Override
-  public void unregisterModule(String experienceId) {
-    mMailBoxes.remove(experienceId);
+  public void unregisterModule(String appId) {
+    mMailBoxes.remove(appId);
   }
 
-  private void addUserInteractionToDatabase(String experienceId, Bundle userInteraction) {
+  private void addUserInteractionToDatabase(String appId, Bundle userInteraction) {
     PendingUserInteraction pendingUserInteraction = new PendingUserInteraction();
-    pendingUserInteraction.setExperienceId(experienceId);
+    pendingUserInteraction.setappId(appId);
     pendingUserInteraction.setUserInteraction(Utils.bundleToString(userInteraction));
     pendingUserInteraction.save();
   }
 
-  private void addForegroundNotificationToDatabase(String experienceId, Bundle notification) {
+  private void addForegroundNotificationToDatabase(String appId, Bundle notification) {
     PendingForegroundNotification pendingForegroundNotification = new PendingForegroundNotification();
-    pendingForegroundNotification.setExperienceId(experienceId);
+    pendingForegroundNotification.setappId(appId);
     pendingForegroundNotification.setNotification(Utils.bundleToString(notification));
     pendingForegroundNotification.save();
   }

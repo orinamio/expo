@@ -9,7 +9,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_COLO
 public class ColorModifier implements NotificationModifier {
 
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (notification.containsKey(NOTIFICATION_COLOR)) {
       builder.setColor(notification.getInt(NOTIFICATION_COLOR));
     }

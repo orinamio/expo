@@ -33,6 +33,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 
+import expo.modules.notifications.action.NotificationActionCenter;
 import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
 import expo.modules.notifications.channels.ChannelScopeManager;
@@ -49,7 +50,7 @@ import expo.modules.notifications.schedulers.CalendarSchedulerModel;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_NAME;
-import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_APP_ID_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ID_KEY;
 import static expo.modules.notifications.helpers.ExpoCronParser.createCronInstance;
 
@@ -61,7 +62,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   private static final String ON_FOREGROUND_NOTIFICATION_EVENT = "Exponent.onForegroundNotification";
 
   private Context mContext;
-  private String mExperienceId;
+  private String mAppId;
   private ChannelManager mChannelManager;
 
   private ModuleRegistry mModuleRegistry = null;
@@ -160,7 +161,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   @ExpoMethod
   public void presentLocalNotification(final HashMap data, final Promise promise) {
     Bundle bundle = new MapArguments(data).toBundle();
-    bundle.putString(NOTIFICATION_EXPERIENCE_ID_KEY, mExperienceId);
+    bundle.putString(NOTIFICATION_APP_ID_KEY, mAppId);
 
     Integer notificationId = Math.abs( new Random().nextInt() );
     bundle.putString(NOTIFICATION_ID_KEY, notificationId.toString());
@@ -168,7 +169,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     NotificationPresenter notificationPresenter = new NotificationPresenterImpl();
     notificationPresenter.presentNotification(
         mContext.getApplicationContext(),
-        mExperienceId,
+            mAppId,
         bundle,
         notificationId
     );
@@ -193,14 +194,14 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
       StatusBarNotification[] activeNotifications = notificationManager.getActiveNotifications();
 
       for (StatusBarNotification notification : activeNotifications) {
-        if (notification.getTag().equals(mExperienceId)) {
+        if (notification.getTag().equals(mAppId)) {
           notificationManager.cancel(notification.getId());
         }
       }
 
       promise.resolve(null);
     } else {
-      promise.reject("Function dismissAllNotifications is available from android 6.0");
+      promise.reject("FUNCTION_NOT_AVAILABLE","Function dismissAllNotifications is available from android 6.0");
     }
   }
 
@@ -217,7 +218,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   public void cancelAllScheduledNotificationsAsync(final Promise promise) {
     SchedulersManagerProxy
         .getInstance(mContext.getApplicationContext())
-        .removeAll(mExperienceId);
+        .removeAll(mAppId);
 
     dismissAllNotifications(promise);
   }
@@ -230,10 +231,10 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     HashMap<String, Object> details = new HashMap<>();
     details.put("data", data);
 
-    details.put("experienceId", mExperienceId);
+    details.put("appId", mAppId);
 
     IntervalSchedulerModel intervalSchedulerModel = new IntervalSchedulerModel();
-    intervalSchedulerModel.setExperienceId(mExperienceId);
+    intervalSchedulerModel.setappId(mAppId);
     intervalSchedulerModel.setDetails(details);
     intervalSchedulerModel.setRepeat(options.containsKey("repeat") && (Boolean) options.get("repeat"));
     intervalSchedulerModel.setScheduledTime(System.currentTimeMillis() + ((Double) options.get("interval")).longValue());
@@ -265,7 +266,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     Cron cron = createCronInstance(options);
 
     CalendarSchedulerModel calendarSchedulerModel = new CalendarSchedulerModel();
-    calendarSchedulerModel.setExperienceId(mExperienceId);
+    calendarSchedulerModel.setappId(mAppId);
     calendarSchedulerModel.setDetails(details);
     calendarSchedulerModel.setRepeat(options.containsKey("repeat") && (Boolean) options.get("repeat"));
     calendarSchedulerModel.setCalendarData(cron.asString());
@@ -288,16 +289,16 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   public void onCreate(ModuleRegistry moduleRegistry) {
     mModuleRegistry = moduleRegistry;
     try {
-      mExperienceId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY); // IdProvider
+      mAppId = mManifest.getString(ExponentManifest.MANIFEST_ID_KEY); // IdProvider
     } catch (JSONException e) {
       e.printStackTrace();
     }
 
     createDefaultChannel();
 
-    mChannelManager = new ChannelScopeManager(mExperienceId);
+    mChannelManager = new ChannelScopeManager(mAppId);
 
-    PostOfficeProxy.getInstance().registerModuleAndGetPendingDeliveries(mExperienceId, this);
+    PostOfficeProxy.getInstance().registerModuleAndGetPendingDeliveries(mAppId, this);
   }
 
   private void createDefaultChannel() {
@@ -311,7 +312,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   }
 
   public void onDestory() {
-    PostOfficeProxy.getInstance().unregisterModule(mExperienceId);
+    PostOfficeProxy.getInstance().unregisterModule(mAppId);
   }
 
   @Override

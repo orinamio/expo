@@ -12,7 +12,7 @@ import expo.modules.notifications.kernel.KernelConstants;
 
 public class IntentModifier implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     Class activityClass = KernelConstants.MAIN_ACTIVITY_CLASS;
     Intent intent = new Intent(context, activityClass);
     intent.putExtra(KernelConstants.NOTIFICATION_OBJECT_KEY, notification);

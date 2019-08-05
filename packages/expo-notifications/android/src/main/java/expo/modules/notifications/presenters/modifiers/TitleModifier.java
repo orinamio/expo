@@ -8,7 +8,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_TITL
 
 public class TitleModifier implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (notification.containsKey(NOTIFICATION_TITLE)) {
       builder.setContentTitle(notification.getString(NOTIFICATION_TITLE));
     }

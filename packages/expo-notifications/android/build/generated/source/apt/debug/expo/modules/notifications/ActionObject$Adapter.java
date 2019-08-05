@@ -3,11 +3,13 @@ package expo.modules.notifications;
 import android.content.ContentValues;
 import android.database.Cursor;
 import com.raizlabs.android.dbflow.config.FlowManager;
-import com.raizlabs.android.dbflow.sql.SqlUtils;
 import com.raizlabs.android.dbflow.sql.builder.Condition;
 import com.raizlabs.android.dbflow.sql.builder.ConditionQueryBuilder;
 import com.raizlabs.android.dbflow.sql.language.Select;
 import com.raizlabs.android.dbflow.structure.ModelAdapter;
+
+import expo.modules.notifications.action.ActionObject;
+
 // This table belongs to the ExpoNotificationActions database
 public final class ActionObject$Adapter extends ModelAdapter<ActionObject> {
 
@@ -267,6 +269,6 @@ public final class ActionObject$Adapter extends ModelAdapter<ActionObject> {
 
   @Override
   public final ActionObject newInstance() {
-    return new expo.modules.notifications.ActionObject();
+    return new ActionObject();
   }
 }

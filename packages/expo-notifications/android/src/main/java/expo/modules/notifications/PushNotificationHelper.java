@@ -25,6 +25,8 @@ import java.util.Random;
 import javax.inject.Inject;
 
 import de.greenrobot.event.EventBus;
+import expo.modules.notifications.action.IntentProvider;
+import expo.modules.notifications.action.NotificationActionCenter;
 import host.exp.exponent.Constants;
 import host.exp.exponent.ExponentManifest;
 import host.exp.exponent.analytics.EXL;
@@ -64,31 +66,31 @@ public class PushNotificationHelper {
     NativeModuleDepsProvider.getInstance().inject(PushNotificationHelper.class, this);
   }
 
-  public void onMessageReceived(final Context context, final String experienceId, final String channelId, final String message, final String body, final String title, final String categoryId) {
-    ExponentDB.experienceIdToExperience(experienceId, new ExponentDB.ExperienceResultListener() {
+  public void onMessageReceived(final Context context, final String appId, final String channelId, final String message, final String body, final String title, final String categoryId) {
+    ExponentDB.appIdToExperience(appId, new ExponentDB.ExperienceResultListener() {
       @Override
       public void onSuccess(ExperienceDBObject experience) {
         try {
           JSONObject manifest = new JSONObject(experience.manifest);
-          sendNotification(context, message, experienceId, channelId, experience.manifestUrl, manifest, body, title, categoryId);
+          sendNotification(context, message, appId, channelId, experience.manifestUrl, manifest, body, title, categoryId);
         } catch (JSONException e) {
-          EXL.e(TAG, "Couldn't deserialize JSON for experience id " + experienceId);
+          EXL.e(TAG, "Couldn't deserialize JSON for experience id " + appId);
         }
       }
 
       @Override
       public void onFailure() {
-        EXL.e(TAG, "No experience found for id " + experienceId);
+        EXL.e(TAG, "No experience found for id " + appId);
       }
     });
   }
 
 
-  private void sendNotification(final Context context, final String message, final String experienceId, final String channelId,
+  private void sendNotification(final Context context, final String message, final String appId, final String channelId,
                                 final String manifestUrl, final JSONObject manifest, final String body, final String title, final String categoryId) {
     final String name = manifest.optString(ExponentManifest.MANIFEST_NAME_KEY);
     if (name == null) {
-      EXL.e(TAG, "No name found for experience id " + experienceId);
+      EXL.e(TAG, "No name found for experience id " + appId);
       return;
     }
 
@@ -111,12 +113,12 @@ public class PushNotificationHelper {
         }
 
         // Update metadata
-        final int notificationId = mode == Mode.COLLAPSE ? experienceId.hashCode() : new Random().nextInt();
-        addUnreadNotificationToMetadata(experienceId, message, notificationId);
+        final int notificationId = mode == Mode.COLLAPSE ? appId.hashCode() : new Random().nextInt();
+        addUnreadNotificationToMetadata(appId, message, notificationId);
 
         // Collapse mode fields
         if (mode == Mode.COLLAPSE) {
-          unreadNotifications = getUnreadNotificationsFromMetadata(experienceId);
+          unreadNotifications = getUnreadNotificationsFromMetadata(appId);
 
           String collapsedTitleRaw = notificationPreferences.optString(ExponentManifest.MANIFEST_NOTIFICATION_ANDROID_COLLAPSED_TITLE);
           if (collapsedTitleRaw != null) {
@@ -127,21 +129,21 @@ public class PushNotificationHelper {
         String scopedChannelId;
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         if (channelId != null) {
-          scopedChannelId = ExponentNotificationManager.getScopedChannelId(experienceId, channelId);
+          scopedChannelId = ExponentNotificationManager.getScopedChannelId(appId, channelId);
           if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             // if we don't yet have a channel matching this ID, check shared preferences --
             // it's possible this device has just been upgraded to Android 8+ and the channel
             // needs to be created in the system
-            if (manager.getNotificationChannel(experienceId, channelId) == null) {
-              JSONObject storedChannelDetails = manager.readChannelSettings(experienceId, channelId);
+            if (manager.getNotificationChannel(appId, channelId) == null) {
+              JSONObject storedChannelDetails = manager.readChannelSettings(appId, channelId);
               if (storedChannelDetails != null) {
-                NotificationHelper.createChannel(context, experienceId, channelId, storedChannelDetails);
+                NotificationHelper.createChannel(context, appId, channelId, storedChannelDetails);
               }
             }
           } else {
             // on Android 7.1 and below, read channel settings for sound from shared preferences
             // and apply this to the notification individually, since channels do not exist
-            JSONObject storedChannelDetails = manager.readChannelSettings(experienceId, channelId);
+            JSONObject storedChannelDetails = manager.readChannelSettings(appId, channelId);
             if (storedChannelDetails != null) {
               // Default to `sound: true` if nothing is stored for this channel
               // to match old behavior of push notifications on Android 7.1 and below (always had sound)
@@ -151,10 +153,10 @@ public class PushNotificationHelper {
             }
           }
         } else {
-          scopedChannelId = ExponentNotificationManager.getScopedChannelId(experienceId, NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID);
+          scopedChannelId = ExponentNotificationManager.getScopedChannelId(appId, NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID);
           NotificationHelper.createChannel(
               context,
-              experienceId,
+              appId,
               NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID,
               context.getString(R.string.default_notification_channel_group),
               new HashMap());
@@ -164,7 +166,7 @@ public class PushNotificationHelper {
 
         // Create notification object
         boolean isMultiple = mode == Mode.COLLAPSE && unreadNotifications.length() > 1;
-        final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(experienceId, body, notificationId, isMultiple, true);
+        final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(appId, body, notificationId, isMultiple, true);
 
         // Create pending intent
         Intent intent = new Intent(context, KernelConstants.MAIN_ACTIVITY_CLASS);
@@ -304,7 +306,7 @@ public class PushNotificationHelper {
             Notification notification = notificationBuilder.build();
 
             // Display
-            manager.notify(experienceId, notificationId, notification);
+            manager.notify(appId, notificationId, notification);
 
             // Send event. Will be consumed if experience is already open.
             EventBus.getDefault().post(notificationEvent);
@@ -327,13 +329,13 @@ public class PushNotificationHelper {
     return imageBitmap;
   }
 
-  private void addUnreadNotificationToMetadata(String experienceId, String message, int notificationId) {
+  private void addUnreadNotificationToMetadata(String appId, String message, int notificationId) {
     try {
       JSONObject notification = new JSONObject();
       notification.put(NotificationConstants.NOTIFICATION_MESSAGE_KEY, message);
       notification.put(NotificationConstants.NOTIFICATION_ID_KEY, notificationId);
 
-      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+      JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
       if (metadata == null) {
         metadata = new JSONObject();
       }
@@ -346,14 +348,14 @@ public class PushNotificationHelper {
       unreadNotifications.put(notification);
 
       metadata.put(ExponentSharedPreferences.EXPERIENCE_METADATA_UNREAD_REMOTE_NOTIFICATIONS, unreadNotifications);
-      mExponentSharedPreferences.updateExperienceMetadata(experienceId, metadata);
+      mExponentSharedPreferences.updateExperienceMetadata(appId, metadata);
     } catch (JSONException e) {
       e.printStackTrace();
     }
   }
 
-  private JSONArray getUnreadNotificationsFromMetadata(String experienceId) {
-    JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(experienceId);
+  private JSONArray getUnreadNotificationsFromMetadata(String appId) {
+    JSONObject metadata = mExponentSharedPreferences.getExperienceMetadata(appId);
     if (metadata != null) {
       if (metadata.has(ExponentSharedPreferences.EXPERIENCE_METADATA_UNREAD_REMOTE_NOTIFICATIONS)) {
         try {

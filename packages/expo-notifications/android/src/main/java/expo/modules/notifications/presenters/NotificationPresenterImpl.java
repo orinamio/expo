@@ -13,7 +13,7 @@ import expo.modules.notifications.presenters.modifiers.BodyModifier;
 import expo.modules.notifications.presenters.modifiers.CategoryModifier;
 import expo.modules.notifications.presenters.modifiers.ChannelModifier;
 import expo.modules.notifications.presenters.modifiers.ColorModifier;
-import expo.modules.notifications.presenters.modifiers.ExperienceIdModifier;
+import expo.modules.notifications.presenters.modifiers.appIdModifier;
 import expo.modules.notifications.presenters.modifiers.IconModifier;
 import expo.modules.notifications.presenters.modifiers.ImportanceModifier;
 import expo.modules.notifications.presenters.modifiers.IntentModifier;
@@ -28,7 +28,7 @@ public class NotificationPresenterImpl implements NotificationPresenter {
   private volatile static List<NotificationModifier> mModifiers = null;
 
   @Override
-  public void presentNotification(Context context, String experienceId, Bundle notification, final int notificationId) {
+  public void presentNotification(Context context, String appId, Bundle notification, final int notificationId) {
 
     new Thread(() -> {
       NotificationCompat.Builder builder = new NotificationCompat.Builder(context);
@@ -36,11 +36,11 @@ public class NotificationPresenterImpl implements NotificationPresenter {
       notification.putInt("notificationIntId", notificationId);
 
       for (NotificationModifier notificationModifier : NotificationPresenterImpl.getNotificationModifiers()) {
-        notificationModifier.modify(builder, notification, context, experienceId);
+        notificationModifier.modify(builder, notification, context, appId);
       }
 
       NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
-      notificationManagerCompat.notify(experienceId, notificationId, builder.build());
+      notificationManagerCompat.notify(appId, notificationId, builder.build());
 
     }).start(); // this may result in leak (anonymous class is a inner class so it has ref to outer class)
 
@@ -56,7 +56,7 @@ public class NotificationPresenterImpl implements NotificationPresenter {
     The order is important because ChannelModifier adds additional options to the notification bundle
      */
 
-    mModifiers.add(new ExperienceIdModifier());
+    mModifiers.add(new appIdModifier());
     mModifiers.add(new ChannelModifier());
     mModifiers.add(new VibrateModifier());
     mModifiers.add(new StickyModifier());

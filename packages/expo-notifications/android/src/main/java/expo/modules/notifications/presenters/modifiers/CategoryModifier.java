@@ -7,16 +7,16 @@ import android.support.v4.app.NotificationCompat;
 
 import expo.modules.notifications.Constants;
 import expo.modules.notifications.kernel.KernelConstants;
-import expo.modules.notifications.IntentProvider;
-import expo.modules.notifications.NotificationActionCenter;
+import expo.modules.notifications.action.IntentProvider;
+import expo.modules.notifications.action.NotificationActionCenter;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
 
 public class CategoryModifier implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (notification.containsKey(NOTIFICATION_CATEGORY)) {
-      String categoryId = getScopedIdIfNotDetached(notification.getString(NOTIFICATION_CATEGORY), experienceId);
+      String categoryId = getScopedIdIfNotDetached(notification.getString(NOTIFICATION_CATEGORY), appId);
 
       NotificationActionCenter.setCategory(categoryId, builder, context, new IntentProvider() {
         @Override
@@ -30,9 +30,9 @@ public class CategoryModifier implements NotificationModifier {
     }
   }
 
-  private String getScopedIdIfNotDetached(String categoryId, String experienceId) {
+  private String getScopedIdIfNotDetached(String categoryId, String appId) {
     if (!Constants.isStandaloneApp()) {
-      return experienceId + ":" + categoryId;
+      return appId + ":" + categoryId;
     }
     return categoryId;
   }

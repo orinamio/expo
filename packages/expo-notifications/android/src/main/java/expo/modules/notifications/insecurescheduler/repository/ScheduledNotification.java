@@ -10,18 +10,18 @@ public class ScheduledNotification extends BaseModel {
 
   @PrimaryKey
   @Column
-  String experienceId;
+  String appId;
 
   @PrimaryKey
   @Column
   int notificationId;
 
-  public String getExperienceId() {
-    return experienceId;
+  public String getappId() {
+    return appId;
   }
 
-  public void setExperienceId(String experienceId) {
-    this.experienceId = experienceId;
+  public void setappId(String appId) {
+    this.appId = appId;
   }
 
   public int getNotificationId() {

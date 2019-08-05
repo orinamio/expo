@@ -14,18 +14,18 @@ public class ScheduledNotificationRepository implements Repository {
   }
 
   @Override
-  public void addScheduledNotification(String experienceId, int notificationId) {
-    deleteScheduledNotification(experienceId, notificationId);
+  public void addScheduledNotification(String appId, int notificationId) {
+    deleteScheduledNotification(appId, notificationId);
 
     ScheduledNotification scheduledNotification = new ScheduledNotification();
-    scheduledNotification.setExperienceId(experienceId);
+    scheduledNotification.setappId(appId);
     scheduledNotification.setNotificationId(notificationId);
 
     scheduledNotification.save();
   }
 
   @Override
-  public void deleteScheduledNotification(String experienceId, int notificationId) {
+  public void deleteScheduledNotification(String appId, int notificationId) {
 
     List<ScheduledNotification> scheduledNotificationList = new Select().from(ScheduledNotification.class)
         .where(Condition.column(ScheduledNotification$Table.NOTIFICATIONID).is(notificationId))
@@ -37,9 +37,9 @@ public class ScheduledNotificationRepository implements Repository {
   }
 
   @Override
-  public List<ScheduledNotification> getScheduledNotificationsForExperience(String experienceId) {
+  public List<ScheduledNotification> getScheduledNotificationsForExperience(String appId) {
     List<ScheduledNotification> scheduledNotificationList = new Select().from(ScheduledNotification.class)
-        .where(Condition.column(ScheduledNotification$Table.EXPERIENCEID).is(experienceId))
+        .where(Condition.column(ScheduledNotification$Table.appId).is(appId))
         .queryList();
 
     return scheduledNotificationList;

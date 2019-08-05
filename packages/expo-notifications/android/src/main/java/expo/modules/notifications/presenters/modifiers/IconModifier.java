@@ -23,7 +23,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ICON
 
 public class IconModifier implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     builder.setSmallIcon(R.drawable.shell_notification_icon);
     if (notification.containsKey(NOTIFICATION_ICON)) {
       ImageRequest imageRequest = ImageRequest.fromUri(notification.getString(NOTIFICATION_ICON));

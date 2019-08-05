@@ -6,7 +6,7 @@ public class NotificationConstants {
   public static final int MAX_COLLAPSED_NOTIFICATIONS = 5;
   public static final String NOTIFICATION_OBJECT_KEY = "notification_object";
   public static final String NOTIFICATION_MESSAGE_KEY = "message"; // deprecated
-  public static final String NOTIFICATION_EXPERIENCE_ID_KEY = "experienceId";
+  public static final String NOTIFICATION_APP_ID_KEY = "appId";
   public static final String NOTIFICATION_EXACT_TIME = "exact";
   public static final String NOTIFICATION_DATA_KEY = "data";
   public static final String NOTIFICATION_ORIGIN_KEY = "origin";
@@ -21,8 +21,6 @@ public class NotificationConstants {
 
   public static final String NOTIFICATION_DEFAULT_CHANNEL_ID = "expo-default";
   public static final String NOTIFICATION_DEFAULT_CHANNEL_NAME = "Expo notifications";
-  public static final String NOTIFICATION_EXPERIENCE_CHANNEL_ID = "expo-experience";
-  public static final String NOTIFICATION_EXPERIENCE_CHANNEL_GROUP_ID = "expo-experience-group";
   public static final String NOTIFICATION_CHANNEL_NAME = "name";
   public static final String NOTIFICATION_CHANNEL_ID = "channelId";
   public static final String NOTIFICATION_CHANNEL_DESCRIPTION = "description";

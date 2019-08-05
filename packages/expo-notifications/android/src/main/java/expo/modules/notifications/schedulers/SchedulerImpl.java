@@ -31,11 +31,11 @@ public class SchedulerImpl implements Scheduler {
       throw new UnableToScheduleException();
     }
 
-    String experienceId = mSchedulerModel.getOwnerExperienceId();
+    String appId = mSchedulerModel.getOwnerappId();
     int notificationId = mSchedulerModel.getId();
     HashMap<String, Object> details = mSchedulerModel.getDetails();
 
-    ThreadSafeInsecureScheduler.getInstance().schedule(experienceId, nextAppearanceTime, notificationId, details, mApplicationContext);
+    ThreadSafeInsecureScheduler.getInstance().schedule(appId, nextAppearanceTime, notificationId, details, mApplicationContext);
   }
 
   @Override
@@ -44,15 +44,15 @@ public class SchedulerImpl implements Scheduler {
   }
 
   @Override
-  public String getOwnerExperienceId() {
-    return mSchedulerModel.getOwnerExperienceId();
+  public String getOwnerappId() {
+    return mSchedulerModel.getOwnerappId();
   }
 
   @Override
   public void cancel() {
-    String experienceId = mSchedulerModel.getOwnerExperienceId();
+    String appId = mSchedulerModel.getOwnerappId();
     int notificationId = mSchedulerModel.getId();
-    ThreadSafeInsecureScheduler.getInstance().cancelScheduled(experienceId, notificationId, mApplicationContext);
+    ThreadSafeInsecureScheduler.getInstance().cancelScheduled(appId, notificationId, mApplicationContext);
   }
 
   @Override

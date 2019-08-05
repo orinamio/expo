@@ -27,6 +27,8 @@ import java.util.HashMap;
 import java.util.TimeZone;
 
 import de.greenrobot.event.EventBus;
+import expo.modules.notifications.action.IntentProvider;
+import expo.modules.notifications.action.NotificationActionCenter;
 import host.exp.exponent.Constants;
 import host.exp.exponent.ExponentManifest;
 import host.exp.exponent.analytics.EXL;
@@ -106,7 +108,7 @@ public class NotificationHelper {
 
   public static void getPushNotificationToken(
       final String deviceId,
-      final String experienceId,
+      final String appId,
       final ExponentNetwork exponentNetwork,
       final ExponentSharedPreferences exponentSharedPreferences,
       final TokenListener listener) {
@@ -136,7 +138,7 @@ public class NotificationHelper {
         JSONObject params = new JSONObject();
         try {
           params.put("deviceId", deviceId);
-          params.put("experienceId", experienceId);
+          params.put("appId", appId);
           params.put("appId", exponentSharedPreferences.getContext().getApplicationContext().getPackageName());
           params.put("deviceToken", sharedPreferencesToken);
           params.put("type", Constants.FCM_ENABLED ? "fcm" : "gcm");
@@ -180,7 +182,7 @@ public class NotificationHelper {
 
   public static void createChannel(
       Context context,
-      String experienceId,
+      String appId,
       String channelId,
       String channelName,
       HashMap details) {
@@ -209,7 +211,7 @@ public class NotificationHelper {
 
       createChannel(
           context,
-          experienceId,
+          appId,
           channelId,
           channelName,
           description,
@@ -223,13 +225,13 @@ public class NotificationHelper {
       // preferences and apply them to individual notifications that have this channelId from now on
       // this is essentially a "polyfill" of notification channels for Android 7.1 and below
       // and means that devs don't have to worry about supporting both versions of Android at once
-      new ExponentNotificationManager(context).saveChannelSettings(experienceId, channelId, details);
+      new ExponentNotificationManager(context).saveChannelSettings(appId, channelId, details);
     }
   }
 
   public static void createChannel(
       Context context,
-      String experienceId,
+      String appId,
       String channelId,
       JSONObject details) {
     try {
@@ -267,7 +269,7 @@ public class NotificationHelper {
 
       createChannel(
           context,
-          experienceId,
+          appId,
           channelId,
           channelName,
           description,
@@ -283,7 +285,7 @@ public class NotificationHelper {
 
   private static void createChannel(
       Context context,
-      String experienceId,
+      String appId,
       String channelId,
       String channelName,
       String description,
@@ -313,7 +315,7 @@ public class NotificationHelper {
         }
       }
 
-      NotificationChannel channel = new NotificationChannel(ExponentNotificationManager.getScopedChannelId(experienceId, channelId), channelName, importance);
+      NotificationChannel channel = new NotificationChannel(ExponentNotificationManager.getScopedChannelId(appId, channelId), channelName, importance);
 
       // sound is now on by default for channels
       if (sound == null || !sound) {
@@ -341,22 +343,22 @@ public class NotificationHelper {
         channel.setShowBadge(badge);
       }
 
-      new ExponentNotificationManager(context).createNotificationChannel(experienceId, channel);
+      new ExponentNotificationManager(context).createNotificationChannel(appId, channel);
     }
   }
 
-  public static void maybeCreateLegacyStoredChannel(Context context, String experienceId, String channelId, HashMap details) {
+  public static void maybeCreateLegacyStoredChannel(Context context, String appId, String channelId, HashMap details) {
     // no version check here because if we're on Android 7.1 or below, we still want to save
     // the channel in shared preferences
-    NotificationChannel existingChannel = new ExponentNotificationManager(context).getNotificationChannel(experienceId, channelId);
+    NotificationChannel existingChannel = new ExponentNotificationManager(context).getNotificationChannel(appId, channelId);
     if (existingChannel == null && details.containsKey(NotificationConstants.NOTIFICATION_CHANNEL_NAME)) {
-      createChannel(context, experienceId, channelId, (String) details.get(NotificationConstants.NOTIFICATION_CHANNEL_NAME), details);
+      createChannel(context, appId, channelId, (String) details.get(NotificationConstants.NOTIFICATION_CHANNEL_NAME), details);
     }
   }
 
-  public static void deleteChannel(Context context, String experienceId, String channelId) {
+  public static void deleteChannel(Context context, String appId, String channelId) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-      new ExponentNotificationManager(context).deleteNotificationChannel(experienceId, channelId);
+      new ExponentNotificationManager(context).deleteNotificationChannel(appId, channelId);
     } else {
       // deleting a channel on O+ still retains all its settings, so doing nothing here emulates that
     }
@@ -369,10 +371,10 @@ public class NotificationHelper {
       final ExponentManifest exponentManifest,
       final Listener listener) {
     final ExponentNotificationManager manager = new ExponentNotificationManager(context);
-    final String experienceId = (String) details.get("experienceId");
+    final String appId = (String) details.get("appId");
     final NotificationCompat.Builder builder = new NotificationCompat.Builder(
         context,
-        ExponentNotificationManager.getScopedChannelId(experienceId, NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID));
+        ExponentNotificationManager.getScopedChannelId(appId, NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID));
 
     builder.setSmallIcon(Constants.isStandaloneApp() ? R.drawable.shell_notification_icon : R.drawable.notification_icon);
     builder.setAutoCancel(true);
@@ -381,22 +383,22 @@ public class NotificationHelper {
 
     if (data.containsKey("channelId")) {
       String channelId = (String) data.get("channelId");
-    builder.setChannelId(ExponentNotificationManager.getScopedChannelId(experienceId, channelId));
+    builder.setChannelId(ExponentNotificationManager.getScopedChannelId(appId, channelId));
 
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
       // if we don't yet have a channel matching this ID, check shared preferences --
       // it's possible this device has just been upgraded to Android 8+ and the channel
       // needs to be created in the system
-      if (manager.getNotificationChannel(experienceId, channelId) == null) {
-        JSONObject storedChannelDetails = manager.readChannelSettings(experienceId, channelId);
+      if (manager.getNotificationChannel(appId, channelId) == null) {
+        JSONObject storedChannelDetails = manager.readChannelSettings(appId, channelId);
         if (storedChannelDetails != null) {
-          createChannel(context, experienceId, channelId, storedChannelDetails);
+          createChannel(context, appId, channelId, storedChannelDetails);
         }
       }
     } else {
       // on Android 7.1 and below, read channel settings for sound, priority, and vibrate from shared preferences
       // and apply these settings to the notification individually, since channels do not exist
-      JSONObject storedChannelDetails = manager.readChannelSettings(experienceId, channelId);
+      JSONObject storedChannelDetails = manager.readChannelSettings(appId, channelId);
       if (storedChannelDetails != null) {
         if (storedChannelDetails.optBoolean(NotificationConstants.NOTIFICATION_CHANNEL_SOUND, false)) {
           builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
@@ -437,14 +439,14 @@ public class NotificationHelper {
           EXL.e(TAG, "Failed to set vibrate settings on notification from stored channel: " + e.getMessage());
         }
       } else {
-        EXL.e(TAG, "No stored channel found for " + experienceId + ": " + channelId);
+        EXL.e(TAG, "No stored channel found for " + appId + ": " + channelId);
       }
     }
   } else {
     // make a default channel so that people don't have to explicitly create a channel to see notifications
     createChannel(
         context,
-        experienceId,
+        appId,
         NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID,
         context.getString(R.string.default_notification_channel_group),
         new HashMap());
@@ -470,7 +472,7 @@ public class NotificationHelper {
       builder.setOngoing((Boolean) data.get("sticky"));
     }
 
-    ExponentDB.experienceIdToExperience(experienceId, new ExponentDB.ExperienceResultListener() {
+    ExponentDB.appIdToExperience(appId, new ExponentDB.ExperienceResultListener() {
       @Override
       public void onSuccess(final ExperienceDBObject experience) {
         new Thread(new Runnable() { /// use weak reference in the future
@@ -491,7 +493,7 @@ public class NotificationHelper {
 
               final String body = data.containsKey("data") ? JSONUtils.getJSONString(data.get("data")) : "";
 
-              final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(experienceId, body, id, false, false);
+              final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(appId, body, id, false, false);
 
               intent.putExtra(KernelConstants.NOTIFICATION_KEY, body); // deprecated
               intent.putExtra(KernelConstants.NOTIFICATION_OBJECT_KEY, notificationEvent.toJSONObject(null).toString());
@@ -507,7 +509,7 @@ public class NotificationHelper {
                     Class activityClass = KernelConstants.MAIN_ACTIVITY_CLASS;
                     Intent intent = new Intent(context, activityClass);
                     intent.putExtra(KernelConstants.NOTIFICATION_MANIFEST_URL_KEY, manifestUrl);
-                    final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(experienceId, body, id, false, false);
+                    final ReceivedNotificationEvent notificationEvent = new ReceivedNotificationEvent(appId, body, id, false, false);
                     intent.putExtra(KernelConstants.NOTIFICATION_KEY, body); // deprecated
                     intent.putExtra(KernelConstants.NOTIFICATION_OBJECT_KEY, notificationEvent.toJSONObject(null).toString());
                     return intent;
@@ -532,13 +534,13 @@ public class NotificationHelper {
                       if (data.containsKey("icon")) {
                         builder.setLargeIcon(bitmap);
                       }
-                      manager.notify(experienceId, id, builder.build());
+                      manager.notify(appId, id, builder.build());
                       EventBus.getDefault().post(notificationEvent);
                       listener.onSuccess(id);
                     }
                   });
             } catch (JSONException e) {
-              listener.onFailure(new Exception("Couldn't deserialize JSON for experience id " + experienceId));
+              listener.onFailure(new Exception("Couldn't deserialize JSON for experience id " + appId));
             }
           }
         }).start();
@@ -546,7 +548,7 @@ public class NotificationHelper {
 
       @Override
       public void onFailure() {
-        listener.onFailure(new Exception("No experience found for id " + experienceId));
+        listener.onFailure(new Exception("No experience found for id " + appId));
       }
     });
   }
@@ -563,11 +565,11 @@ public class NotificationHelper {
 
     details.put("data", data);
 
-    String experienceId;
+    String appId;
 
     try {
-      experienceId = manifest.getString(ExponentManifest.MANIFEST_ID_KEY);
-      details.put("experienceId", experienceId);
+      appId = manifest.getString(ExponentManifest.MANIFEST_ID_KEY);
+      details.put("appId", appId);
     } catch (Exception e) {
       listener.onFailure(new Exception("Requires Experience Id"));
       return;
@@ -628,7 +630,7 @@ public class NotificationHelper {
     }
 
     try {
-      manager.schedule(experienceId, id, details, time, interval);
+      manager.schedule(appId, id, details, time, interval);
       listener.onSuccess(id);
     } catch (Exception e) {
       listener.onFailure(e);

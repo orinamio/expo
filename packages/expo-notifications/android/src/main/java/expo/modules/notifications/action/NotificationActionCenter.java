@@ -1,4 +1,4 @@
-package expo.modules.notifications;
+package expo.modules.notifications.action;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -14,6 +14,8 @@ import com.raizlabs.android.dbflow.sql.language.Select;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+
+import expo.modules.notifications.ActionObject$Table;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ACTION_TYPE_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;

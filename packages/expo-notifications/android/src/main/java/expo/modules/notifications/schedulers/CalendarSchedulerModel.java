@@ -43,7 +43,7 @@ public class CalendarSchedulerModel extends BaseModel implements SchedulerModel 
   int id;
 
   @Column
-  String experienceId;
+  String appId;
 
   @Column
   boolean repeat;
@@ -62,8 +62,8 @@ public class CalendarSchedulerModel extends BaseModel implements SchedulerModel 
   }
 
   @Override
-  public String getOwnerExperienceId() {
-    return experienceId;
+  public String getOwnerappId() {
+    return appId;
   }
 
   @Override
@@ -112,12 +112,12 @@ public class CalendarSchedulerModel extends BaseModel implements SchedulerModel 
     this.id = id;
   }
 
-  public String getExperienceId() {
-    return experienceId;
+  public String getappId() {
+    return appId;
   }
 
-  public void setExperienceId(String experienceId) {
-    this.experienceId = experienceId;
+  public void setappId(String appId) {
+    this.appId = appId;
   }
 
   public boolean isRepeat() {

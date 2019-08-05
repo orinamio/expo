@@ -1,4 +1,4 @@
-package expo.modules.notifications;
+package expo.modules.notifications.action;
 
 import android.content.Intent;
 

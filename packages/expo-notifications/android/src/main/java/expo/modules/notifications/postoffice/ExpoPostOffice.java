@@ -4,12 +4,12 @@ import android.os.Bundle;
 
 public interface ExpoPostOffice {
 
-  void notifyAboutUserInteraction(String experienceId, Bundle userInteraction);
+  void notifyAboutUserInteraction(String appId, Bundle userInteraction);
 
-  void sendForegroundNotification(String experienceId, Bundle notification);
+  void sendForegroundNotification(String appId, Bundle notification);
 
-  void registerModuleAndGetPendingDeliveries(String experienceId, Mailbox mailbox);
+  void registerModuleAndGetPendingDeliveries(String appId, Mailbox mailbox);
 
-  void unregisterModule(String experienceId);
+  void unregisterModule(String appId);
 
 }

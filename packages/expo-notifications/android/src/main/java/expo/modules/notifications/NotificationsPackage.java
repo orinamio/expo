@@ -17,6 +17,6 @@ public class NotificationsPackage extends BasePackage {
 
   @Override
   public List<ViewManager> createViewManagers(Context context) {
-    return Collections.singletonList((ViewManager) new NotificationsViewManager());
+    return Collections.emptyList();
   }
 }

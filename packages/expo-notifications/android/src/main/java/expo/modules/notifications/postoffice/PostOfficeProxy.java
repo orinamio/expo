@@ -25,22 +25,22 @@ public class PostOfficeProxy implements ExpoPostOffice {
   }
 
   @Override
-  public void notifyAboutUserInteraction(final String experienceId, final Bundle userInteraction) {
-    mSingleThreadExecutor.execute(() -> mPostOffice.notifyAboutUserInteraction(experienceId, userInteraction));
+  public void notifyAboutUserInteraction(final String appId, final Bundle userInteraction) {
+    mSingleThreadExecutor.execute(() -> mPostOffice.notifyAboutUserInteraction(appId, userInteraction));
   }
 
   @Override
-  public void sendForegroundNotification(final String experienceId, final Bundle notification) {
-    mSingleThreadExecutor.execute(() -> mPostOffice.sendForegroundNotification(experienceId, notification));
+  public void sendForegroundNotification(final String appId, final Bundle notification) {
+    mSingleThreadExecutor.execute(() -> mPostOffice.sendForegroundNotification(appId, notification));
   }
 
   @Override
-  public void registerModuleAndGetPendingDeliveries(final String experienceId, final Mailbox mailbox) {
-    mSingleThreadExecutor.execute(() -> mPostOffice.registerModuleAndGetPendingDeliveries(experienceId, mailbox));
+  public void registerModuleAndGetPendingDeliveries(final String appId, final Mailbox mailbox) {
+    mSingleThreadExecutor.execute(() -> mPostOffice.registerModuleAndGetPendingDeliveries(appId, mailbox));
   }
 
   @Override
-  public void unregisterModule(final String experienceId) {
-    mSingleThreadExecutor.execute(() -> mPostOffice.unregisterModule(experienceId));
+  public void unregisterModule(final String appId) {
+    mSingleThreadExecutor.execute(() -> mPostOffice.unregisterModule(appId));
   }
 }

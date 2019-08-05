@@ -19,10 +19,10 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJE
 public class InsecureSimpleScheduler implements InsecureScheduler {
 
   @Override
-  public void schedule(String experienceId, long elapsedTime, int notificationId, HashMap notification, Context context) {
+  public void schedule(String appId, long elapsedTime, int notificationId, HashMap notification, Context context) {
     Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
 
-    notificationIntent.setType(experienceId);
+    notificationIntent.setType(appId);
     notificationIntent.setAction(String.valueOf(notificationId));
 
     notificationIntent.putExtra(NOTIFICATION_ID_KEY, notificationId);
@@ -31,7 +31,7 @@ public class InsecureSimpleScheduler implements InsecureScheduler {
     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
     AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
 
-    ScheduledNotificationRepository.getInstance().addScheduledNotification(experienceId, notificationId);
+    ScheduledNotificationRepository.getInstance().addScheduledNotification(appId, notificationId);
 
     if (notification.containsKey(NOTIFICATION_EXACT_TIME) && ((Boolean) notification.containsKey(NOTIFICATION_EXACT_TIME))) {
       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -45,12 +45,12 @@ public class InsecureSimpleScheduler implements InsecureScheduler {
   }
 
   @Override
-  public void cancelScheduled(String experienceId, int notificationId, Context context) {
-    ScheduledNotificationRepository.getInstance().deleteScheduledNotification(experienceId, notificationId);
+  public void cancelScheduled(String appId, int notificationId, Context context) {
+    ScheduledNotificationRepository.getInstance().deleteScheduledNotification(appId, notificationId);
 
     Intent notificationIntent = new Intent(context, ScheduledNotificationReceiver.class);
 
-    notificationIntent.setType(experienceId);
+    notificationIntent.setType(appId);
     notificationIntent.setAction(String.valueOf(notificationId));
 
     PendingIntent pendingIntent = PendingIntent.getBroadcast(context, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -59,13 +59,13 @@ public class InsecureSimpleScheduler implements InsecureScheduler {
   }
 
   @Override
-  public void cancelAllScheduled(String experienceId, Context context) {
+  public void cancelAllScheduled(String appId, Context context) {
     List<ScheduledNotification> scheduledNotificationList = ScheduledNotificationRepository
         .getInstance()
-        .getScheduledNotificationsForExperience(experienceId);
+        .getScheduledNotificationsForExperience(appId);
 
     for (ScheduledNotification scheduledNotification : scheduledNotificationList) {
-      cancelScheduled(experienceId, scheduledNotification.getNotificationId(), context);
+      cancelScheduled(appId, scheduledNotification.getNotificationId(), context);
     }
   }
 }

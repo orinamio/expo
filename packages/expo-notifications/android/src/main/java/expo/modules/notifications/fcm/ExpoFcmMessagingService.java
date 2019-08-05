@@ -1,11 +1,9 @@
-package host.exp.exponent.fcm;
+package expo.modules.notifications.fcm;
 
 import android.os.Bundle;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-
-import host.exp.exponent.Constants;
 import expo.modules.notifications.presenters.NotificationPresenterProvider;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_BODY;
@@ -13,7 +11,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATE
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CHANNEL_ID;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_COLOR;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_DATA;
-import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_APP_ID_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ICON;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_REMOTE;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_SOUND;
@@ -23,23 +21,15 @@ public class ExpoFcmMessagingService extends FirebaseMessagingService {
 
   @Override
   public void onNewToken(String token) {
-    if (!Constants.FCM_ENABLED) {
-      return;
-    }
-
     FcmRegistrationIntentService.registerForeground(getApplicationContext(), token);
   }
 
   @Override
   public void onMessageReceived(RemoteMessage remoteMessage) {
-    if (!Constants.FCM_ENABLED) {
-      return;
-    }
-
     Bundle bundle = new Bundle();
-    String experienceId = remoteMessage.getData().get(NOTIFICATION_EXPERIENCE_ID_KEY);
+    String appId = remoteMessage.getData().get(NOTIFICATION_APP_ID_KEY);
 
-    bundle.putString(NOTIFICATION_EXPERIENCE_ID_KEY, experienceId);
+    bundle.putString(NOTIFICATION_APP_ID_KEY, appId);
     bundle.putString(NOTIFICATION_CHANNEL_ID, remoteMessage.getData().get(NOTIFICATION_CHANNEL_ID));
     bundle.putString(NOTIFICATION_BODY, remoteMessage.getData().get("message"));
     bundle.putString(NOTIFICATION_TITLE, remoteMessage.getData().get(NOTIFICATION_TITLE));
@@ -52,7 +42,7 @@ public class ExpoFcmMessagingService extends FirebaseMessagingService {
 
     NotificationPresenterProvider.getNotificationPresenter().presentNotification(
       this.getApplicationContext(),
-      experienceId,
+      appId,
       bundle
     );
   }

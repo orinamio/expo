@@ -6,6 +6,6 @@ import android.support.v4.app.NotificationCompat;
 
 public interface NotificationModifier {
 
-  void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceID);
+  void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId);
 
 }

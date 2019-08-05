@@ -12,7 +12,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_SOUN
 
 public class SoundModifer implements NotificationModifier {
   @Override
-  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String experienceId) {
+  public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
     if (Utils.isAndroidVersionBelowOreo() && notification.getBoolean(NOTIFICATION_SOUND)) {
       builder.setDefaults(NotificationCompat.DEFAULT_SOUND);
     }

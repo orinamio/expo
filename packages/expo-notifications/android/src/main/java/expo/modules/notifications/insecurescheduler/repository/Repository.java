@@ -4,10 +4,10 @@ import java.util.List;
 
 public interface Repository {
 
-  void addScheduledNotification(String experienceId, int notificationId);
+  void addScheduledNotification(String appId, int notificationId);
 
-  void deleteScheduledNotification(String experienceId, int notificationId);
+  void deleteScheduledNotification(String appId, int notificationId);
 
-  List<ScheduledNotification> getScheduledNotificationsForExperience(String experienceId);
+  List<ScheduledNotification> getScheduledNotificationsForExperience(String appId);
 
 }

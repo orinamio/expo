@@ -12,7 +12,7 @@ public class ExponentNotification {
 
   private static final String TAG = ExponentNotification.class.getSimpleName();
 
-  public final String experienceId;
+  public final String appId;
   public final String body;
   public final int notificationId;
   public final boolean isMultiple;
@@ -20,8 +20,8 @@ public class ExponentNotification {
   public String actionType;
   public String inputText;
 
-  public ExponentNotification(final String experienceId, final String body, final int notificationId, final boolean isMultiple, final boolean isRemote) {
-    this.experienceId = experienceId;
+  public ExponentNotification(final String appId, final String body, final int notificationId, final boolean isMultiple, final boolean isRemote) {
+    this.appId = appId;
     this.body = body;
     this.notificationId = notificationId;
     this.isMultiple = isMultiple;
@@ -39,7 +39,7 @@ public class ExponentNotification {
       if (body == null) {
         body = object.optString(NotificationConstants.NOTIFICATION_MESSAGE_KEY, null);
       }
-      return new ExponentNotification(object.getString(NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY), body, object.getInt(NotificationConstants.NOTIFICATION_ID_KEY), object.getBoolean(NotificationConstants.NOTIFICATION_IS_MULTIPLE_KEY), object.getBoolean(NotificationConstants.NOTIFICATION_REMOTE_KEY));
+      return new ExponentNotification(object.getString(NotificationConstants.NOTIFICATION_APP_ID_KEY), body, object.getInt(NotificationConstants.NOTIFICATION_ID_KEY), object.getBoolean(NotificationConstants.NOTIFICATION_IS_MULTIPLE_KEY), object.getBoolean(NotificationConstants.NOTIFICATION_REMOTE_KEY));
     } catch (JSONException e) {
       EXL.e(TAG, e.toString());
       return null;
@@ -49,7 +49,7 @@ public class ExponentNotification {
   public JSONObject toJSONObject(String origin) {
     JSONObject notification = new JSONObject();
     try {
-      notification.put(NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY, experienceId);
+      notification.put(NotificationConstants.NOTIFICATION_APP_ID_KEY, appId);
       if (origin != null) {
         notification.put(NotificationConstants.NOTIFICATION_ORIGIN_KEY, origin);
       }

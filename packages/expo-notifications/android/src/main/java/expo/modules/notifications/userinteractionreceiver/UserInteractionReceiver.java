@@ -6,12 +6,12 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import expo.modules.notifications.ExponentNotificationManager;
-import expo.modules.notifications.NotificationActionCenter;
+import expo.modules.notifications.action.NotificationActionCenter;
 import expo.modules.notifications.NotificationConstants;
 import expo.modules.notifications.postoffice.PostOfficeProxy;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ACTION_TYPE_KEY;
-import static expo.modules.notifications.NotificationConstants.NOTIFICATION_EXPERIENCE_ID_KEY;
+import static expo.modules.notifications.NotificationConstants.NOTIFICATION_APP_ID_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_OBJECT_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_STICKY;
 
@@ -36,12 +36,12 @@ public class UserInteractionReceiver {
       return false;
     }
 
-    String experienceId = notification.getString(NOTIFICATION_EXPERIENCE_ID_KEY);
+    String appId = notification.getString(NOTIFICATION_APP_ID_KEY);
     Integer notificationIntId = notification.getInt("notificationIntId");
 
     if (!notification.getBoolean(NOTIFICATION_STICKY)) {
       ExponentNotificationManager manager = new ExponentNotificationManager(context);
-      manager.cancel(experienceId, notificationIntId);
+      manager.cancel(appId, notificationIntId);
     }
 
     // Add action type
@@ -61,7 +61,7 @@ public class UserInteractionReceiver {
     }
 
     PostOfficeProxy.getInstance().notifyAboutUserInteraction(
-        experienceId,
+        appId,
         notification
     );
 

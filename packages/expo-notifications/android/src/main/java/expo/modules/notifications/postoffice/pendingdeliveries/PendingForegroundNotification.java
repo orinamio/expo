@@ -13,7 +13,7 @@ public class PendingForegroundNotification extends BaseModel {
   public int id;
 
   @Column
-  public String experienceId;
+  public String appId;
 
   @Column
   public String notification;
@@ -26,12 +26,12 @@ public class PendingForegroundNotification extends BaseModel {
     this.id = id;
   }
 
-  public String getExperienceId() {
-    return experienceId;
+  public String getappId() {
+    return appId;
   }
 
-  public void setExperienceId(String experienceId) {
-    this.experienceId = experienceId;
+  public void setappId(String appId) {
+    this.appId = appId;
   }
 
   public String getNotification() {

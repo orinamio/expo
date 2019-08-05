@@ -8,9 +8,9 @@ public interface SchedulersManager {
 
   void triggerAll(String action);
 
-  void removeAll(String experienceId);
+  void removeAll(String appId);
 
-  void cancelAlreadyScheduled(String experienceId);
+  void cancelAlreadyScheduled(String appId);
 
   void rescheduleOrDelete(String id);
 
