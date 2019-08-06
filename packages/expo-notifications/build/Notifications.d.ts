@@ -3,8 +3,10 @@ import { Notification, LocalNotification, Channel, ActionType, OnUserInteraction
 export declare function createCategoryAsync(categoryId: string, actions: ActionType[]): Promise<void>;
 export declare function deleteCategoryAsync(categoryId: string): Promise<void>;
 export declare function getPushTokenAsync(): Promise<string>;
-export declare function createChannelAndroidAsync(id: string, channel: Channel): Promise<void>;
-export declare function deleteChannelAndroidAsync(id: string): Promise<void>;
+export declare function createChannelAsync(id: string, channel: Channel): Promise<void>;
+export declare function deleteChannelAsync(id: string): Promise<void>;
+export declare function createChannelGroupAsync(groupId: string, groupName: string): Promise<void>;
+export declare function deleteChannelGroupAsync(groupId: string): Promise<void>;
 /**
  * @remarks
  * Shows a notification instantly

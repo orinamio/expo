@@ -63,19 +63,25 @@ export function getPushTokenAsync() {
     }
     return ExponentNotifications.getPushTokenAsync();
 }
-export function createChannelAndroidAsync(id, channel) {
+export function createChannelAsync(id, channel) {
     if (Platform.OS !== 'android') {
         console.warn(`createChannelAndroidAsync(...) has no effect on ${Platform.OS}`);
         return Promise.resolve();
     }
     return ExponentNotifications.createChannel(id, channel);
 }
-export function deleteChannelAndroidAsync(id) {
+export function deleteChannelAsync(id) {
     if (Platform.OS !== 'android') {
         console.warn(`deleteChannelAndroidAsync(...) has no effect on ${Platform.OS}`);
         return Promise.resolve();
     }
     return ExponentNotifications.deleteChannel(id);
+}
+export function createChannelGroupAsync(groupId, groupName) {
+    return ExponentNotifications.createChannelGroup(groupId, groupName);
+}
+export function deleteChannelGroupAsync(groupId) {
+    return ExponentNotifications.deleteChannelGroup(groupId);
 }
 /**
  * @remarks

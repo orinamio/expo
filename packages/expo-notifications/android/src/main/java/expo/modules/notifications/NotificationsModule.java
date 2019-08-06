@@ -11,13 +11,6 @@ import android.content.Context;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.notification.StatusBarNotification;
-import android.support.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.iid.FirebaseInstanceId;
-import com.google.firebase.iid.InstanceIdResult;
-
 import org.unimodules.core.ExportedModule;
 import org.unimodules.core.ModuleRegistry;
 import org.unimodules.core.Promise;
@@ -176,7 +169,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     NotificationPresenter notificationPresenter = new NotificationPresenterImpl();
     notificationPresenter.presentNotification(
         mContext.getApplicationContext(),
-            mAppId,
+        mAppId,
         bundle,
         notificationId
     );

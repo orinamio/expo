@@ -88,7 +88,7 @@ export function getPushTokenAsync(): Promise<string> {
   return ExponentNotifications.getPushTokenAsync();
 }
 
-export function createChannelAndroidAsync(id: string, channel: Channel): Promise<void> {
+export function createChannelAsync(id: string, channel: Channel): Promise<void> {
   if (Platform.OS !== 'android') {
     console.warn(`createChannelAndroidAsync(...) has no effect on ${Platform.OS}`);
     return Promise.resolve();
@@ -96,12 +96,20 @@ export function createChannelAndroidAsync(id: string, channel: Channel): Promise
   return ExponentNotifications.createChannel(id, channel);
 }
 
-export function deleteChannelAndroidAsync(id: string): Promise<void> {
+export function deleteChannelAsync(id: string): Promise<void> {
   if (Platform.OS !== 'android') {
     console.warn(`deleteChannelAndroidAsync(...) has no effect on ${Platform.OS}`);
     return Promise.resolve();
   }
   return ExponentNotifications.deleteChannel(id);
+}
+
+export function createChannelGroupAsync(groupId: string, groupName: string): Promise<void> {
+  return ExponentNotifications.createChannelGroup(groupId, groupName);
+}
+
+export function deleteChannelGroupAsync(groupId: string): Promise<void> {
+  return ExponentNotifications.deleteChannelGroup(groupId);
 }
 
 /**
