@@ -5,8 +5,6 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 
-
-import com.facebook.common.executors.UiThreadImmediateExecutorService;
 import com.facebook.common.references.CloseableReference;
 import com.facebook.datasource.DataSource;
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -17,14 +15,14 @@ import com.facebook.imagepipeline.request.ImageRequest;
 
 import java.util.concurrent.Executor;
 
-import host.exp.expoview.R;
+import expo.modules.notifications.R;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ICON;
 
 public class IconModifier implements NotificationModifier {
   @Override
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
-    builder.setSmallIcon(R.drawable.shell_notification_icon);
+    builder.setSmallIcon(R.mipmap.notification_icon);
     if (notification.containsKey(NOTIFICATION_ICON)) {
       ImageRequest imageRequest = ImageRequest.fromUri(notification.getString(NOTIFICATION_ICON));
       ImagePipeline imagePipeline = Fresco.getImagePipeline();

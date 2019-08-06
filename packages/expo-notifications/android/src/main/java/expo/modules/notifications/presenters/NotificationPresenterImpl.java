@@ -13,7 +13,7 @@ import expo.modules.notifications.presenters.modifiers.BodyModifier;
 import expo.modules.notifications.presenters.modifiers.CategoryModifier;
 import expo.modules.notifications.presenters.modifiers.ChannelModifier;
 import expo.modules.notifications.presenters.modifiers.ColorModifier;
-import expo.modules.notifications.presenters.modifiers.appIdModifier;
+import expo.modules.notifications.presenters.modifiers.AppIdModifier;
 import expo.modules.notifications.presenters.modifiers.IconModifier;
 import expo.modules.notifications.presenters.modifiers.ImportanceModifier;
 import expo.modules.notifications.presenters.modifiers.IntentModifier;
@@ -56,7 +56,7 @@ public class NotificationPresenterImpl implements NotificationPresenter {
     The order is important because ChannelModifier adds additional options to the notification bundle
      */
 
-    mModifiers.add(new appIdModifier());
+    mModifiers.add(new AppIdModifier());
     mModifiers.add(new ChannelModifier());
     mModifiers.add(new VibrateModifier());
     mModifiers.add(new StickyModifier());

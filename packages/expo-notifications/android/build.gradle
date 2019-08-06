@@ -76,4 +76,5 @@ dependencies {
   api 'com.google.firebase:firebase-core:16.0.9'
   api 'com.google.firebase:firebase-messaging:18.0.0'
   compile group: 'com.squareup.okhttp3', name: 'okhttp', version: '3.11.0'
+  api 'com.facebook.fresco:fresco:1.10.0'
 }

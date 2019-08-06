@@ -55,7 +55,3 @@ export type UserInteraction = LocalNotification & {
 export type OnUserInteractionListener = (userInteraction: UserInteraction) => void;
 
 export type OnForegroundNotificationListener = (notification: LocalNotification) => void;
-
-// Android assigns unique number to each notification natively.
-// Since that's not supported on iOS, we generate an unique string.
-export type LocalNotificationId = string | number;

@@ -6,7 +6,7 @@ public final class IntervalSchedulerModel$Table {
 
   public static final String ID = "id";
 
-  public static final String EXPERIENCEID = "experienceId";
+  public static final String APPID = "appId";
 
   public static final String REPEAT = "repeat";
 

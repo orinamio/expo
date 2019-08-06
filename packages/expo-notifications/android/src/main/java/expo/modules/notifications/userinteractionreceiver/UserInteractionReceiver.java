@@ -4,8 +4,8 @@ import android.app.RemoteInput;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NotificationManagerCompat;
 
-import expo.modules.notifications.ExponentNotificationManager;
 import expo.modules.notifications.action.NotificationActionCenter;
 import expo.modules.notifications.NotificationConstants;
 import expo.modules.notifications.postoffice.PostOfficeProxy;
@@ -30,6 +30,11 @@ public class UserInteractionReceiver {
 
   public boolean onIntent(Intent intent, Context context) {
     Bundle bundle = intent.getExtras();
+
+    if (bundle == null) {
+      return false;
+    }
+
     Bundle notification = bundle.getBundle(NOTIFICATION_OBJECT_KEY);
 
     if (notification == null) {
@@ -40,8 +45,7 @@ public class UserInteractionReceiver {
     Integer notificationIntId = notification.getInt("notificationIntId");
 
     if (!notification.getBoolean(NOTIFICATION_STICKY)) {
-      ExponentNotificationManager manager = new ExponentNotificationManager(context);
-      manager.cancel(appId, notificationIntId);
+      NotificationManagerCompat.from(context).cancel(appId, notificationIntId);
     }
 
     // Add action type

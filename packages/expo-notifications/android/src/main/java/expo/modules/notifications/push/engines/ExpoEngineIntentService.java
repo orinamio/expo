@@ -18,7 +18,7 @@ import okhttp3.Response;
 
 public class ExpoEngineIntentService extends IntentService {
 
-    private ExpoEngineIntentService() {
+    public ExpoEngineIntentService() {
         super("ExpoEngineIntentService");
     }
 

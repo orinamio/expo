@@ -39,7 +39,7 @@ public class ScheduledNotificationRepository implements Repository {
   @Override
   public List<ScheduledNotification> getScheduledNotificationsForExperience(String appId) {
     List<ScheduledNotification> scheduledNotificationList = new Select().from(ScheduledNotification.class)
-        .where(Condition.column(ScheduledNotification$Table.appId).is(appId))
+        .where(Condition.column(ScheduledNotification$Table.APPID).is(appId))
         .queryList();
 
     return scheduledNotificationList;

@@ -1,6 +1,6 @@
 import UUID from 'uuid-js';
 
-import { LocalNotification, LocalNotificationId } from './Notifications.types';
+import { LocalNotification } from './Notifications.types';
 
 function guardPermission() {
   if (!('Notification' in window)) {
@@ -57,7 +57,7 @@ async function getNotificationsAsync(tag?: string): Promise<Notification[]> {
 }
 
 export default {
-  async presentLocalNotification(notification: LocalNotification): Promise<LocalNotificationId> {
+  async presentLocalNotification(notification: LocalNotification): Promise<string> {
     const registration = await getRegistrationAsync();
     const tag = generateID();
     registration.showNotification(...transformLocalNotification(notification, tag));

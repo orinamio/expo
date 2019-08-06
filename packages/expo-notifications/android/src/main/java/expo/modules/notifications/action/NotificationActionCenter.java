@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
-import expo.modules.notifications.ActionObject$Table;
+import expo.modules.notifications.action.ActionObject$Table;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_ACTION_TYPE_KEY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;

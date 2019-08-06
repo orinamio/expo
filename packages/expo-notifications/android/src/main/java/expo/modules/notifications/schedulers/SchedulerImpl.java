@@ -4,7 +4,6 @@ import android.content.Context;
 
 import java.util.HashMap;
 
-import expo.modules.notifications.ExponentNotificationManager;
 import expo.modules.notifications.exceptions.UnableToScheduleException;
 import expo.modules.notifications.insecurescheduler.ThreadSafeInsecureScheduler;
 

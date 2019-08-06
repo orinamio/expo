@@ -1,28 +1,28 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
-INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
+ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
+INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
 	package
 		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:11-47
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
-		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
+		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
 	android:versionCode
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
-		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-23:12
+		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:1:1-25:12
 		INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml
 	xmlns:android
 		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:2:5-63
 application
-ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:4:5-21:19
+ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:4:5-23:19
 receiver#insecurescheduler.ScheduledNotificationReceiver
 ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:6:9-8:39
 	android:exported
@@ -57,6 +57,10 @@ action#android.intent.action.QUICKBOOT_POWERON
 ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:18:17-81
 	android:name
 		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:18:25-79
+service#push.engines.ExpoEngineIntentService
+ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:22:9-71
+	android:name
+		ADDED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml:22:18-69
 uses-sdk
 INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml reason: use-sdk injection requested
 INJECTED from /Users/szymonkapala/work/expo/packages/expo-notifications/android/src/main/AndroidManifest.xml

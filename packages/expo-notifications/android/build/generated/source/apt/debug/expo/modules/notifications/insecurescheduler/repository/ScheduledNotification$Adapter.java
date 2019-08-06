@@ -23,13 +23,13 @@ public final class ScheduledNotification$Adapter extends ModelAdapter<ScheduledN
 
   @Override
   protected final String getInsertStatementQuery() {
-    return "INSERT INTO `ScheduledNotification` (`EXPERIENCEID`, `NOTIFICATIONID`) VALUES (?, ?)";
+    return "INSERT INTO `ScheduledNotification` (`APPID`, `NOTIFICATIONID`) VALUES (?, ?)";
   }
 
   @Override
   public void bindToStatement(android.database.sqlite.SQLiteStatement statement, ScheduledNotification model) {
-    if (((java.lang.String)model.experienceId) != null)  {
-      statement.bindString(1,((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      statement.bindString(1,((java.lang.String)model.appId));
     } else {
       statement.bindNull(1);
     }
@@ -39,10 +39,10 @@ public final class ScheduledNotification$Adapter extends ModelAdapter<ScheduledN
 
   @Override
   public void bindToContentValues(ContentValues contentValues, ScheduledNotification model) {
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     contentValues.put("notificationId",((int)model.notificationId));
 
@@ -50,10 +50,10 @@ public final class ScheduledNotification$Adapter extends ModelAdapter<ScheduledN
 
   @Override
   public void bindToInsertValues(ContentValues contentValues, ScheduledNotification model) {
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     contentValues.put("notificationId",((int)model.notificationId));
 
@@ -66,12 +66,12 @@ public final class ScheduledNotification$Adapter extends ModelAdapter<ScheduledN
 
   @Override
   public void loadFromCursor(Cursor cursor, ScheduledNotification model) {
-    int indexexperienceId = cursor.getColumnIndex("experienceId");
-    if (indexexperienceId != -1)  {
-      if (cursor.isNull(indexexperienceId)) {
-        model.experienceId = null;
+    int indexappId = cursor.getColumnIndex("appId");
+    if (indexappId != -1)  {
+      if (cursor.isNull(indexappId)) {
+        model.appId = null;
       } else {
-        model.experienceId = cursor.getString(indexexperienceId);
+        model.appId = cursor.getString(indexappId);
       }
     }
     int indexnotificationId = cursor.getColumnIndex("notificationId");
@@ -82,17 +82,17 @@ public final class ScheduledNotification$Adapter extends ModelAdapter<ScheduledN
 
   @Override
   public ConditionQueryBuilder<ScheduledNotification> getPrimaryModelWhere(ScheduledNotification model) {
-    return new ConditionQueryBuilder<ScheduledNotification>(ScheduledNotification.class, Condition.column(ScheduledNotification$Table.EXPERIENCEID).is((model.experienceId)),Condition.column(ScheduledNotification$Table.NOTIFICATIONID).is((model.notificationId)));
+    return new ConditionQueryBuilder<ScheduledNotification>(ScheduledNotification.class, Condition.column(ScheduledNotification$Table.APPID).is((model.appId)),Condition.column(ScheduledNotification$Table.NOTIFICATIONID).is((model.notificationId)));
   }
 
   @Override
   public ConditionQueryBuilder<ScheduledNotification> createPrimaryModelWhere() {
-    return new ConditionQueryBuilder<ScheduledNotification>(ScheduledNotification.class, Condition.column(ScheduledNotification$Table.EXPERIENCEID).is("?"),Condition.column(ScheduledNotification$Table.NOTIFICATIONID).is("?"));
+    return new ConditionQueryBuilder<ScheduledNotification>(ScheduledNotification.class, Condition.column(ScheduledNotification$Table.APPID).is("?"),Condition.column(ScheduledNotification$Table.NOTIFICATIONID).is("?"));
   }
 
   @Override
   public String getCreationQuery() {
-    return "CREATE TABLE IF NOT EXISTS `ScheduledNotification`(`experienceId` TEXT, `notificationId` INTEGER, PRIMARY KEY(`experienceId`, `notificationId`));";
+    return "CREATE TABLE IF NOT EXISTS `ScheduledNotification`(`appId` TEXT, `notificationId` INTEGER, PRIMARY KEY(`appId`, `notificationId`));";
   }
 
   @Override

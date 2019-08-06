@@ -42,11 +42,11 @@ class PostOffice implements ExpoPostOffice {
     mMailBoxes.put(appId, mailbox);
 
     List<PendingForegroundNotification> pendingForegroundNotificationList = new Select().from(PendingForegroundNotification.class)
-        .where(Condition.column(PendingForegroundNotification$Table.appId).is(appId))
+        .where(Condition.column(PendingForegroundNotification$Table.APPID).is(appId))
         .queryList();
 
     List<PendingUserInteraction> pendingUserInteractionList = new Select().from(PendingUserInteraction.class)
-        .where(Condition.column(PendingUserInteraction$Table.appId).is(appId))
+        .where(Condition.column(PendingUserInteraction$Table.APPID).is(appId))
         .queryList();
 
     for (PendingForegroundNotification pendingForegroundNotification : pendingForegroundNotificationList) {

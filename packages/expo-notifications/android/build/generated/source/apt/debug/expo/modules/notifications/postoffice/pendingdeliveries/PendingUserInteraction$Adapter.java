@@ -23,13 +23,13 @@ public final class PendingUserInteraction$Adapter extends ModelAdapter<PendingUs
 
   @Override
   protected final String getInsertStatementQuery() {
-    return "INSERT INTO `PendingUserInteraction` (`EXPERIENCEID`, `USERINTERACTION`) VALUES (?, ?)";
+    return "INSERT INTO `PendingUserInteraction` (`APPID`, `USERINTERACTION`) VALUES (?, ?)";
   }
 
   @Override
   public void bindToStatement(android.database.sqlite.SQLiteStatement statement, PendingUserInteraction model) {
-    if (((java.lang.String)model.experienceId) != null)  {
-      statement.bindString(1,((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      statement.bindString(1,((java.lang.String)model.appId));
     } else {
       statement.bindNull(1);
     }
@@ -44,10 +44,10 @@ public final class PendingUserInteraction$Adapter extends ModelAdapter<PendingUs
   @Override
   public void bindToContentValues(ContentValues contentValues, PendingUserInteraction model) {
     contentValues.put("id",((int)model.id));
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     if (((java.lang.String)model.userInteraction) != null)  {
       contentValues.put("userInteraction",((java.lang.String)model.userInteraction));
@@ -59,10 +59,10 @@ public final class PendingUserInteraction$Adapter extends ModelAdapter<PendingUs
 
   @Override
   public void bindToInsertValues(ContentValues contentValues, PendingUserInteraction model) {
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     if (((java.lang.String)model.userInteraction) != null)  {
       contentValues.put("userInteraction",((java.lang.String)model.userInteraction));
@@ -83,12 +83,12 @@ public final class PendingUserInteraction$Adapter extends ModelAdapter<PendingUs
     if (indexid != -1)  {
       model.id = cursor.getInt(indexid);
     }
-    int indexexperienceId = cursor.getColumnIndex("experienceId");
-    if (indexexperienceId != -1)  {
-      if (cursor.isNull(indexexperienceId)) {
-        model.experienceId = null;
+    int indexappId = cursor.getColumnIndex("appId");
+    if (indexappId != -1)  {
+      if (cursor.isNull(indexappId)) {
+        model.appId = null;
       } else {
-        model.experienceId = cursor.getString(indexexperienceId);
+        model.appId = cursor.getString(indexappId);
       }
     }
     int indexuserInteraction = cursor.getColumnIndex("userInteraction");
@@ -128,7 +128,7 @@ public final class PendingUserInteraction$Adapter extends ModelAdapter<PendingUs
 
   @Override
   public String getCreationQuery() {
-    return "CREATE TABLE IF NOT EXISTS `PendingUserInteraction`(`id` INTEGER PRIMARY KEY AUTOINCREMENT, `experienceId` TEXT, `userInteraction` TEXT);";
+    return "CREATE TABLE IF NOT EXISTS `PendingUserInteraction`(`id` INTEGER PRIMARY KEY AUTOINCREMENT, `appId` TEXT, `userInteraction` TEXT);";
   }
 
   @Override

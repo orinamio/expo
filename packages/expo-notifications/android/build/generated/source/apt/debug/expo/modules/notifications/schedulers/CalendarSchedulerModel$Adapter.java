@@ -23,14 +23,14 @@ public final class CalendarSchedulerModel$Adapter extends ModelAdapter<CalendarS
 
   @Override
   protected final String getInsertStatementQuery() {
-    return "INSERT INTO `CalendarSchedulerModel` (`ID`, `EXPERIENCEID`, `REPEAT`, `SERIALIZEDDETAILS`, `CALENDARDATA`) VALUES (?, ?, ?, ?, ?)";
+    return "INSERT INTO `CalendarSchedulerModel` (`ID`, `APPID`, `REPEAT`, `SERIALIZEDDETAILS`, `CALENDARDATA`) VALUES (?, ?, ?, ?, ?)";
   }
 
   @Override
   public void bindToStatement(android.database.sqlite.SQLiteStatement statement, CalendarSchedulerModel model) {
     statement.bindLong(1,((int)model.id));
-    if (((java.lang.String)model.experienceId) != null)  {
-      statement.bindString(2,((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      statement.bindString(2,((java.lang.String)model.appId));
     } else {
       statement.bindNull(2);
     }
@@ -56,10 +56,10 @@ public final class CalendarSchedulerModel$Adapter extends ModelAdapter<CalendarS
   @Override
   public void bindToContentValues(ContentValues contentValues, CalendarSchedulerModel model) {
     contentValues.put("id",((int)model.id));
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     Object modelrepeat = FlowManager.getTypeConverterForClass(java.lang.Boolean.class).getDBValue(model.repeat);
     if (modelrepeat != null)  {
@@ -83,10 +83,10 @@ public final class CalendarSchedulerModel$Adapter extends ModelAdapter<CalendarS
   @Override
   public void bindToInsertValues(ContentValues contentValues, CalendarSchedulerModel model) {
     contentValues.put("id",((int)model.id));
-    if (((java.lang.String)model.experienceId) != null)  {
-      contentValues.put("experienceId",((java.lang.String)model.experienceId));
+    if (((java.lang.String)model.appId) != null)  {
+      contentValues.put("appId",((java.lang.String)model.appId));
     } else {
-      contentValues.putNull("experienceId");
+      contentValues.putNull("appId");
     }
     Object modelrepeat = FlowManager.getTypeConverterForClass(java.lang.Boolean.class).getDBValue(model.repeat);
     if (modelrepeat != null)  {
@@ -118,12 +118,12 @@ public final class CalendarSchedulerModel$Adapter extends ModelAdapter<CalendarS
     if (indexid != -1)  {
       model.id = cursor.getInt(indexid);
     }
-    int indexexperienceId = cursor.getColumnIndex("experienceId");
-    if (indexexperienceId != -1)  {
-      if (cursor.isNull(indexexperienceId)) {
-        model.experienceId = null;
+    int indexappId = cursor.getColumnIndex("appId");
+    if (indexappId != -1)  {
+      if (cursor.isNull(indexappId)) {
+        model.appId = null;
       } else {
-        model.experienceId = cursor.getString(indexexperienceId);
+        model.appId = cursor.getString(indexappId);
       }
     }
     int indexrepeat = cursor.getColumnIndex("repeat");
@@ -180,7 +180,7 @@ public final class CalendarSchedulerModel$Adapter extends ModelAdapter<CalendarS
 
   @Override
   public String getCreationQuery() {
-    return "CREATE TABLE IF NOT EXISTS `CalendarSchedulerModel`(`id` INTEGER, `experienceId` TEXT, `repeat` INTEGER, `serializedDetails` TEXT, `calendarData` TEXT, PRIMARY KEY(`id`));";
+    return "CREATE TABLE IF NOT EXISTS `CalendarSchedulerModel`(`id` INTEGER, `appId` TEXT, `repeat` INTEGER, `serializedDetails` TEXT, `calendarData` TEXT, PRIMARY KEY(`id`));";
   }
 
   @Override
