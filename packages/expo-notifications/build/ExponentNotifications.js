@@ -1,3 +1,3 @@
-import { NativeModules } from 'react-native';
-export default NativeModules.ExponentNotifications;
+import { NativeModulesProxy } from '@unimodules/core';
+export default NativeModulesProxy.ExponentNotifications;
 //# sourceMappingURL=ExponentNotifications.js.map

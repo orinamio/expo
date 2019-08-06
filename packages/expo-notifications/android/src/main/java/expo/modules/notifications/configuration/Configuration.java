@@ -14,6 +14,6 @@ public class Configuration {
         />
      */
 
-    public static String MAIN_ACTIVITY_NAME = "com.notifications_test.MainActivity.class";
+    public static String MAIN_ACTIVITY_NAME = "com.notifications_test.MainActivity";
 
 }
