@@ -37,6 +37,8 @@ import expo.modules.notifications.channels.ChannelManager;
 import expo.modules.notifications.channels.ChannelPOJO;
 import expo.modules.notifications.channels.ThreadSafeChannelManager;
 import expo.modules.notifications.provider.AppIdProvider;
+import expo.modules.notifications.push.Engine;
+import expo.modules.notifications.push.PushNotificationEngineProvider;
 import expo.modules.notifications.schedulers.IntervalSchedulerModel;
 import expo.modules.notifications.schedulers.SchedulerImpl;
 import expo.modules.notifications.postoffice.Mailbox;
@@ -109,17 +111,18 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
   @ExpoMethod
   public void getPushTokenAsync(final Promise promise) {
-    FirebaseInstanceId.getInstance().getInstanceId()
-        .addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
-          @Override
-          public void onComplete(@NonNull Task<InstanceIdResult> task) {
-            if (!task.isSuccessful()) {
-              promise.reject(task.getException());
+    Engine pushNotificationEngine = PushNotificationEngineProvider.getPushNotificationEngine();
+    pushNotificationEngine.getToken(
+            mAppId,
+            mContext.getApplicationContext(),
+            (String token) -> {
+              if (token == null) {
+                promise.reject("TOKEN_ERROR", "Obtaining token wasn't possible");
+              } else {
+                promise.resolve(token);
+              }
             }
-            String token = task.getResult().getToken();
-            promise.resolve(token);
-          }
-        });
+    );
   }
 
   @ExpoMethod

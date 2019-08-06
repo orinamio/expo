@@ -5,6 +5,7 @@ import android.os.Bundle;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import expo.modules.notifications.presenters.NotificationPresenterProvider;
+import expo.modules.notifications.push.PushNotificationEngineProvider;
 
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_BODY;
 import static expo.modules.notifications.NotificationConstants.NOTIFICATION_CATEGORY;
@@ -21,7 +22,7 @@ public class ExpoFcmMessagingService extends FirebaseMessagingService {
 
   @Override
   public void onNewToken(String token) {
-    FcmRegistrationIntentService.registerForeground(getApplicationContext(), token);
+    PushNotificationEngineProvider.getPushNotificationEngine().onFirebaseToken(token, this.getApplicationContext());
   }
 
   @Override
