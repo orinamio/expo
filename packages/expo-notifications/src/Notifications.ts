@@ -221,7 +221,9 @@ export async function scheduleNotificationWithCalendarAsync(
     );
   }
 
-  return ExponentNotifications.scheduleNotificationWithCalendar(notification, options);
+  _validateNotification(notification);
+  let nativeNotification = _processNotification(notification);
+  return ExponentNotifications.scheduleNotificationWithCalendar(nativeNotification, options);
 }
 
 export async function scheduleNotificationWithTimerAsync(
@@ -234,7 +236,9 @@ export async function scheduleNotificationWithTimerAsync(
   if (options.interval < 1) {
     throw new CodedError('WRONG_OPTIONS', 'Interval must be not less then 1');
   }
-  return ExponentNotifications.scheduleNotificationWithTimer(notification, options);
+  _validateNotification(notification);
+  let nativeNotification = _processNotification(notification);
+  return ExponentNotifications.scheduleNotificationWithTimer(nativeNotification, options);
 }
 
 function isInRangeInclusive(variable: number, min: number, max: number): boolean {
