@@ -1,25 +1,28 @@
 <manifest package="expo.modules.notifications"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application>
         <!-- Scheduled notifications -->
         <receiver
-            android:name="insecurescheduler.ScheduledNotificationReceiver"
+            android:name=".insecurescheduler.ScheduledNotificationReceiver"
             android:exported="false"/>
 
         <receiver
-            android:name="receivers.SchedulingTriggerReceiver"
+            android:name=".receivers.SchedulingTriggerReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.REBOOT"/>
-                <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.intent.action.BOOT_COMPLETED"/> // only after unlock
                 <action android:name="android.intent.action.TIMEZONE_CHANGED"/>
                 <action android:name="android.intent.action.TIME_CHANGED"/>
                 <action android:name="android.intent.action.QUICKBOOT_POWERON"/>
             </intent-filter>
         </receiver>
 
-        <service android:name="push.engines.ExpoEngineIntentService"/>
+        <service android:name=".push.engines.ExpoEngineIntentService"/>
+
     </application>
 
 </manifest>

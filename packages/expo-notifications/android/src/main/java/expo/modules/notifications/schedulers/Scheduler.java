@@ -9,7 +9,7 @@ public interface Scheduler {
 
   String getIdAsString();
 
-  String getOwnerappId();
+  String getOwnerAppId();
 
   void cancel();
 

@@ -8,7 +8,7 @@ public interface SchedulerModel {
 
   boolean shouldBeTriggeredByAction(String action);
 
-  String getOwnerappId();
+  String getOwnerAppId();
 
   int getId();
 

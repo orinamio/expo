@@ -7,18 +7,18 @@ public final class SchedulersDatabase$Database extends BaseDatabaseDefinition {
 
   public SchedulersDatabase$Database(DatabaseHolder holder) {
     // Writing for: SchedulersDatabase
-    holder.putDatabaseForTable(expo.modules.notifications.schedulers.CalendarSchedulerModel.class, this);
     holder.putDatabaseForTable(expo.modules.notifications.schedulers.IntervalSchedulerModel.class, this);
+    holder.putDatabaseForTable(expo.modules.notifications.schedulers.CalendarSchedulerModel.class, this);
 
     // Begin Migrations
     // End Migrations
 
-    models.add(expo.modules.notifications.schedulers.CalendarSchedulerModel.class);
-    modelTableNames.put("CalendarSchedulerModel", expo.modules.notifications.schedulers.CalendarSchedulerModel.class);
-    modelAdapters.put(expo.modules.notifications.schedulers.CalendarSchedulerModel.class, new expo.modules.notifications.schedulers.CalendarSchedulerModel$Adapter());
     models.add(expo.modules.notifications.schedulers.IntervalSchedulerModel.class);
     modelTableNames.put("IntervalSchedulerModel", expo.modules.notifications.schedulers.IntervalSchedulerModel.class);
     modelAdapters.put(expo.modules.notifications.schedulers.IntervalSchedulerModel.class, new expo.modules.notifications.schedulers.IntervalSchedulerModel$Adapter());
+    models.add(expo.modules.notifications.schedulers.CalendarSchedulerModel.class);
+    modelTableNames.put("CalendarSchedulerModel", expo.modules.notifications.schedulers.CalendarSchedulerModel.class);
+    modelAdapters.put(expo.modules.notifications.schedulers.CalendarSchedulerModel.class, new expo.modules.notifications.schedulers.CalendarSchedulerModel$Adapter());
     // Writing Query Models
   }
 

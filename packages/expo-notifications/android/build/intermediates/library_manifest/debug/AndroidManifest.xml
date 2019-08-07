@@ -8,25 +8,28 @@
         android:minSdkVersion="21"
         android:targetSdkVersion="26" />
 
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+
     <application>
 
         <!-- Scheduled notifications -->
         <receiver
-            android:name="insecurescheduler.ScheduledNotificationReceiver"
+            android:name="expo.modules.notifications.insecurescheduler.ScheduledNotificationReceiver"
             android:exported="false" />
         <receiver
-            android:name="receivers.SchedulingTriggerReceiver"
+            android:name="expo.modules.notifications.receivers.SchedulingTriggerReceiver"
             android:exported="true" >
             <intent-filter>
                 <action android:name="android.intent.action.REBOOT" />
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
+ // only after unlock
                 <action android:name="android.intent.action.TIMEZONE_CHANGED" />
                 <action android:name="android.intent.action.TIME_CHANGED" />
                 <action android:name="android.intent.action.QUICKBOOT_POWERON" />
             </intent-filter>
         </receiver>
 
-        <service android:name="push.engines.ExpoEngineIntentService" />
+        <service android:name="expo.modules.notifications.push.engines.ExpoEngineIntentService" />
     </application>
 
 </manifest>

@@ -182,7 +182,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
     int id = Integer.parseInt(notificationId);
     NotificationManager notificationManager = (NotificationManager) mContext
         .getSystemService(Context.NOTIFICATION_SERVICE);
-    notificationManager.cancel(id);
+    notificationManager.cancel(mAppId, id);
     promise.resolve(null);
   }
 
@@ -195,7 +195,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
 
       for (StatusBarNotification notification : activeNotifications) {
         if (notification.getTag().equals(mAppId)) {
-          notificationManager.cancel(notification.getId());
+          notificationManager.cancel(notification.getTag(), notification.getId());
         }
       }
 
@@ -226,6 +226,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   @ExpoMethod
   public void scheduleNotificationWithTimer(HashMap<String, Object> data, final HashMap<String, Object> options, final Promise promise) {
     data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
+    data.put(NOTIFICATION_APP_ID_KEY, mAppId);
 
     HashMap<String, Object> details = new HashMap<>();
     details.put("data", data);
@@ -257,6 +258,7 @@ public class NotificationsModule extends ExportedModule implements RegistryLifec
   @ExpoMethod
   public void scheduleNotificationWithCalendar(HashMap data, final HashMap options, final Promise promise) {
     data = new NotificationScoper(mModuleRegistry.getModule(StringScoper.class)).scope(data);
+    data.put(NOTIFICATION_APP_ID_KEY, mAppId);
 
     HashMap<String, Object> details = new HashMap<>();
     details.put("data", data);

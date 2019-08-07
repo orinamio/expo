@@ -1,8 +1,7 @@
 package expo.modules.notifications.exceptions;
 
-import org.unimodules.core.errors.CodedException;
 
-public class UnableToScheduleException extends CodedException {
+public class UnableToScheduleException extends Exception {
 
   static final String message = "Probably there won't be any time in the future when notification can be scheduled";
 
@@ -14,8 +13,4 @@ public class UnableToScheduleException extends CodedException {
     super(message);
   }
 
-  @Override
-  public String getCode() {
-    return "E_NOTIFICATION_CANNOT_BE_SCHEDULED";
-  }
 }

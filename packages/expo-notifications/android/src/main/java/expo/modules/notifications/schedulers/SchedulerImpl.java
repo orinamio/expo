@@ -30,7 +30,7 @@ public class SchedulerImpl implements Scheduler {
       throw new UnableToScheduleException();
     }
 
-    String appId = mSchedulerModel.getOwnerappId();
+    String appId = mSchedulerModel.getOwnerAppId();
     int notificationId = mSchedulerModel.getId();
     HashMap<String, Object> details = mSchedulerModel.getDetails();
 
@@ -43,13 +43,13 @@ public class SchedulerImpl implements Scheduler {
   }
 
   @Override
-  public String getOwnerappId() {
-    return mSchedulerModel.getOwnerappId();
+  public String getOwnerAppId() {
+    return mSchedulerModel.getOwnerAppId();
   }
 
   @Override
   public void cancel() {
-    String appId = mSchedulerModel.getOwnerappId();
+    String appId = mSchedulerModel.getOwnerAppId();
     int notificationId = mSchedulerModel.getId();
     ThreadSafeInsecureScheduler.getInstance().cancelScheduled(appId, notificationId, mApplicationContext);
   }

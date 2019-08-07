@@ -58,7 +58,7 @@ class SchedulerManagerImpl implements SchedulersManager {
     ArrayList<String> toRemove = new ArrayList<String>();
 
     for (Map.Entry<String, Scheduler> scheduler : mSchedulersMap.entrySet()) {
-      if (appId == null || scheduler.getValue().getOwnerappId().equals(appId)) {
+      if (appId == null || scheduler.getValue().getOwnerAppId().equals(appId)) {
         scheduler.getValue().remove();
         toRemove.add(scheduler.getKey());
       }
@@ -73,7 +73,7 @@ class SchedulerManagerImpl implements SchedulersManager {
   public void cancelAlreadyScheduled(String appId) {
     fetchSchedulersMap();
     for (Scheduler scheduler : mSchedulersMap.values()) {
-      if (appId == null || scheduler.getOwnerappId().equals(appId)) {
+      if (appId == null || scheduler.getOwnerAppId().equals(appId)) {
         scheduler.cancel();
       }
     }

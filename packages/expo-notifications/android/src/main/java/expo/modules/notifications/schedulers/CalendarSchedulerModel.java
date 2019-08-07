@@ -62,7 +62,7 @@ public class CalendarSchedulerModel extends BaseModel implements SchedulerModel 
   }
 
   @Override
-  public String getOwnerappId() {
+  public String getOwnerAppId() {
     return appId;
   }
 
