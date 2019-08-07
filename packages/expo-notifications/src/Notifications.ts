@@ -79,8 +79,8 @@ export function deleteCategoryAsync(categoryId: string): Promise<void> {
 
 /* Re-export */
 export function getPushTokenAsync(): Promise<string> {
-  if (!ExponentNotifications.getExponentPushTokenAsync) {
-    throw new UnavailabilityError('Expo.Notifications', 'getExpoPushTokenAsync');
+  if (!ExponentNotifications.getPushTokenAsync) {
+    throw new UnavailabilityError('Expo.Notifications', 'getPushTokenAsync');
   }
   if (!Constants.isDevice) {
     throw new Error(`Must be on a physical device to get an Expo Push Token`);

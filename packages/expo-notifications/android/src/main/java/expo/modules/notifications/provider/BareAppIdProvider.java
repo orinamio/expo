@@ -12,18 +12,12 @@ import expo.modules.notifications.configuration.Configuration;
 
 public class BareAppIdProvider implements InternalModule, AppIdProvider{
 
-    private static String DEFAULT_APP_ID = "defaultId";
-
     public BareAppIdProvider(Context context) { }
 
     public BareAppIdProvider() {}
 
     public String getAppId() {
-        if (!Configuration.APP_ID.equals("")) {
-            return Configuration.APP_ID;
-        }
-
-        return DEFAULT_APP_ID;
+        return Configuration.APP_ID;
     }
 
     @Override

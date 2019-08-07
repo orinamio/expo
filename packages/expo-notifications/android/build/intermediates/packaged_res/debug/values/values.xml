@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="default_web_client_id" translatable="false">249963836118-v77m8drv95fd3digjhijsuc647d5rdtu.apps.googleusercontent.com</string>
+    <string name="firebase_database_url" translatable="false">https://expo-notifications-test.firebaseio.com</string>
+    <string name="gcm_defaultSenderId" translatable="false">249963836118</string>
+    <string name="google_api_key" translatable="false">AIzaSyDO-7_fDX2DflSxjTYyHN9x75m1bK2Jnxw</string>
+    <string name="google_app_id" translatable="false">1:249963836118:android:109a8b5d93a44bd5</string>
+    <string name="google_crash_reporting_api_key" translatable="false">AIzaSyDO-7_fDX2DflSxjTYyHN9x75m1bK2Jnxw</string>
+    <string name="google_storage_bucket" translatable="false">expo-notifications-test.appspot.com</string>
+    <string name="project_id" translatable="false">expo-notifications-test</string>
+</resources>
