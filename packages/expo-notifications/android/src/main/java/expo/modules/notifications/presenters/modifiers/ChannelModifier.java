@@ -21,7 +21,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_VIBR
 public class ChannelModifier implements NotificationModifier {
   @Override
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
-    if (!notification.containsKey(NOTIFICATION_CHANNEL_ID)) {
+    if ((!notification.containsKey(NOTIFICATION_CHANNEL_ID)) || notification.getString(NOTIFICATION_CHANNEL_ID) == null) {
       notification.putString(NOTIFICATION_CHANNEL_ID, NotificationConstants.NOTIFICATION_DEFAULT_CHANNEL_ID);
     }
 

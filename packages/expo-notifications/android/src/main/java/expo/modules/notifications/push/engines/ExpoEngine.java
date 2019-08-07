@@ -3,13 +3,21 @@ package expo.modules.notifications.push.engines;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.annotation.NonNull;
+
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.iid.InstanceIdResult;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.UUID;
+import java.util.concurrent.Semaphore;
 
 import expo.modules.notifications.push.CompletionHandler;
 import expo.modules.notifications.push.engines.configuration.Configuration;
@@ -53,12 +61,46 @@ public class ExpoEngine implements expo.modules.notifications.push.Engine {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(appId, expoToken);
+            editor.commit();
             return expoToken;
         }
     }
 
     static String getFromExpoServer(String appId, Context context) {
-        String token = FirebaseInstanceId.getInstance().getInstanceId().getResult().getToken();
+        Semaphore semaphore = new Semaphore(1, true);
+        String token = null;
+        final ArrayList<String> stringWrapper = new ArrayList<>();
+
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
+            @Override
+            public void onComplete(@NonNull Task<InstanceIdResult> task) {
+                if (!task.isSuccessful()) {
+                    semaphore.release();
+                    return;
+                }
+                String token = task.getResult().getToken();
+                stringWrapper.add(token);
+                semaphore.release();
+            }
+        });
+
+        try {
+            semaphore.acquire();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        if (stringWrapper.size() > 0) {
+            token = stringWrapper.get(0);
+        } else {
+            return null;
+        }
 
         JSONObject params = new JSONObject();
         try {
@@ -109,6 +151,7 @@ public class ExpoEngine implements expo.modules.notifications.push.Engine {
 
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.putString(DEVICE_ID, deviceId.toString());
+            editor.commit();
             return deviceId.toString();
         }
     }

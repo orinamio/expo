@@ -9,7 +9,7 @@ import static expo.modules.notifications.NotificationConstants.NOTIFICATION_VIBR
 public class VibrateModifier implements  NotificationModifier {
   @Override
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
-    if (notification.containsKey(NOTIFICATION_VIBRATE)) {
+    if (notification.containsKey(NOTIFICATION_VIBRATE) && notification.getLongArray(NOTIFICATION_VIBRATE) != null) {
       builder.setVibrate(notification.getLongArray(NOTIFICATION_VIBRATE));
     }
   }

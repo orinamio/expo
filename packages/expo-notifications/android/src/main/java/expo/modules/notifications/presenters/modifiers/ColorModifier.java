@@ -10,7 +10,7 @@ public class ColorModifier implements NotificationModifier {
 
   @Override
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
-    if (notification.containsKey(NOTIFICATION_COLOR)) {
+    if (notification.containsKey(NOTIFICATION_COLOR) && notification.getString(NOTIFICATION_COLOR) != null) {
       builder.setColor(notification.getInt(NOTIFICATION_COLOR));
     }
   }

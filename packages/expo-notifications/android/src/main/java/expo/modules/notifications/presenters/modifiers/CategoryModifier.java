@@ -15,7 +15,7 @@ import static expo.modules.notifications.configuration.Configuration.MAIN_ACTIVI
 public class CategoryModifier implements NotificationModifier {
   @Override
   public void modify(NotificationCompat.Builder builder, Bundle notification, Context context, String appId) {
-    if (notification.containsKey(NOTIFICATION_CATEGORY)) {
+    if (notification.containsKey(NOTIFICATION_CATEGORY) && notification.getString(NOTIFICATION_CATEGORY) != null) {
       String categoryId = notification.getString(NOTIFICATION_CATEGORY);
 
       NotificationActionCenter.setCategory(categoryId, builder, context, new IntentProvider() {
