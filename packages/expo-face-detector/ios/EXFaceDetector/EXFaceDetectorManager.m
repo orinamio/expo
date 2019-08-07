@@ -46,6 +46,15 @@ static const NSString *kMinDetectionInterval = @"minDetectionInterval";
 - (instancetype)initWithOptions:(NSDictionary*)options
 {
   if (self = [super init]) {
+    NSString* googleServicesPlist = [[NSBundle mainBundle] pathForResource:@"GoogleService-Info" ofType:@"plist"];
+    NSLog(googleServicesPlist);
+    NSLog(@"googgleServiceFile.plist");
+    NSLog([FIRApp defaultApp] == nil  ? @"true": @"flase");
+    NSLog([[NSFileManager defaultManager] fileExistsAtPath:googleServicesPlist] ? @"true": @"flase");
+    if ([FIRApp defaultApp] == nil && [[NSFileManager defaultManager] fileExistsAtPath:googleServicesPlist]) {
+      NSLog(@"FIRApp configure");
+      [FIRApp configure];
+    }
     _faceDetectionProcessing = NO;
     _lastFrameCapturedTimeMilis = 0;
     _previousFacesCount = -1;
